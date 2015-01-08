@@ -1,0 +1,7 @@
+name:player.bmp
+tiled:false:bool
+width:0:int
+height:0:int
+z:1:int
+color:33:int
+ascii::string

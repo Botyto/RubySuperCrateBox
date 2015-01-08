@@ -1,0 +1,77 @@
+require "rubygems"
+require "gosu"
+
+require_relative "sceneManager.rb"
+require_relative "resourceManager.rb"
+require_relative "common.rb"
+
+include Gosu
+
+class GameWindow < Window
+  class << self
+    def game
+      @@game 
+    end
+
+    def clear
+      print "\e[2J"
+    end
+
+    def move_home
+      print "\e[H"
+    end
+
+    def flush
+      $stdout.flush
+    end
+
+    def set_color(color)
+      print "\e[#{@color}m"
+    end
+
+    def reset_color
+      print "\e[0m"
+    end
+
+    def move_cursor(x, y)
+      # not implemented
+    end
+  end
+
+  def initialize
+    super(26*10, 18*10, false)
+    @caption = "Ruby Super Crate Box"
+    @@game = self
+    
+    ResourceManager.initialize self
+    ResourceManager.load
+    SceneManager.initialize
+    SceneManager.activate_level(ResourceManager.levels["1"])
+    
+    @camera = Point.new
+  end
+
+  def update
+    SceneManager.update
+  end
+  
+  def draw
+    #GameWindow.clear
+    #GameWindow.move_home
+
+    translate(-@camera.x, -@camera.y) do
+      SceneManager.draw
+    end
+
+    #GameWindow.flush
+  end
+  
+  def button_down(button)
+    close if button == KbEscape
+    SceneManager.button_pressed button
+  end
+  
+  def button_up(button)
+    SceneManager.button_released button
+  end
+end
