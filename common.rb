@@ -52,14 +52,6 @@ class Rectangle
     @x, @y, @w, @h = x, y, w, h
   end
   
-  def x1
-    x
-  end
-  
-  def y1
-    y
-  end
-  
   def x2
     x + w
   end
@@ -71,6 +63,15 @@ class Rectangle
   def area
     w*h
   end
+
+  alias :width, :w
+  alias :height, :h
+  alias :x1, :x
+  alias :y1, :y
+  alias :left, :x
+  alias :top, :y
+  alias :right, :x2
+  alias :bottom, :y2
   
   def point_inside?(point)
     if point.is_a? Point then
@@ -85,6 +86,12 @@ class Rectangle
       not (other.x2 < x1 or other.y2 < y1 or other.x1 > x2 or other.y1 > y2)
     else
       false
+    end
+  end
+
+  def +(point)
+    if point.is_a? Point then
+      Rectangle.new(@x + point.x, @y + point.y, @w, @h)
     end
   end
 end
