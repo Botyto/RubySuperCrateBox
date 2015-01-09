@@ -19,6 +19,10 @@ GRAY    = 37
 class Sprite
   attr_accessor :name, :image, :tiled, :z, :width, :height, :color, :ascii
 
+  def aabb(offset = Point.new)
+    Rectangle.new(-@width/2, -@height/2, @width, @height) + offset
+  end
+
   def draw_ascii(x, y)
     GameWindow.set_color @color
     base = Point.new((x/GameWindow.game.width).floor, (y/GameWindow.game.height).floor)
