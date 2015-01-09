@@ -2,7 +2,7 @@ require_relative "resourceManager.rb"
 require_relative "common.rb"
 
 class GameObject
-  attr_accessor :position, :velocity, :gravity, :angle, :frame
+  attr_accessor :position, :velocity, :gravity, :angle, :frame, :solid
   attr_reader :active, :sprite
 
   def initialize
@@ -17,23 +17,47 @@ class GameObject
   end
 
   def update
+    # update 
     @frame += 1
+
+    # update movement & position
     @velocity.y += @gravity
     @position += @velocity
+
+    # handle collisions with other objects
     handle_collisions
   end
 
-  def handle_collisions
+  def aabb
+    @sprite.aabb position
+  end
 
+  def handle_collisions
+    SceneManager.objects.each do |other|
+      if @sprite and other.sprite then
+        collide other if aabb.intersects? other.aabb
+      elsif @sprite and !other.sprite then
+        collide other if aabb.point_inside? other.position
+      elsif !@sprite and other.sprite then
+        collide other if other.aabb.point_inside? @position
+      else
+        collide other if @position == other.position
+      end
+    end
+  end
+
+  def collide(other)
   end
 
   def draw
+    # draw self, if a sprite is set
     if @sprite != nil then
-      sprite.draw_frame(frame, @position.x, @position.y, @sprite.z)
+      sprite.draw_rot_frame(frame, @position.x, @position.y, @sprite.z, angle)
     end
   end
 
   def set_sprite(sprite)
+    # if a string is provided, then use it to find the sprite in the resources
     if sprite.is_a? String then
       @sprite = ResourceManager.sprites[sprite]
     else
@@ -42,6 +66,7 @@ class GameObject
   end
 
   def set_position(position)
+    # only set the position if a Point is provided
     if position.is_a? Point then
       @position = position
     end

@@ -17,15 +17,15 @@ class Level
   end
   
   def set_player(x, y)
-    @player = Point.new((x + 0.5)*GRID_WIDTH, y*GRID_HEIGHT)
+    @player = Point.new((x + 1)*GRID_WIDTH, (y + 0.5)*GRID_HEIGHT)
   end
   
   def add_spawn(x, y)
-    @spawn_points.push Point.new((x + 0.5)*GRID_WIDTH, y*GRID_HEIGHT)
+    @spawn_points.push Point.new((x + 1)*GRID_WIDTH, (y + 0.5)*GRID_HEIGHT)
   end
   
   def add_fire(x, y)
-    @fires.push Point.new(x*GRID_WIDTH, y*GRID_HEIGHT)
+    @fires.push Point.new((x + 0.5)*GRID_WIDTH, (y + 0.5)*GRID_HEIGHT)
   end
   
   def set_size(width, height)
