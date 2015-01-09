@@ -51,9 +51,9 @@ class Level
   end
   
   def activate()
-    SceneManager.add_object Player.new(@player)
-    @spawn_points.each { |spawn| SceneManager.add_object Spawner.new(spawn) }
-    @fires.each { |fire| SceneManager.add_object Fire.new(fire) }
+    SceneManager.add_object(Player, @player)
+    @spawn_points.each { |spawn| SceneManager.add_object(Spawner, spawn) }
+    @fires.each { |fire| SceneManager.add_object(Fire, fire) }
   end
   
   def draw

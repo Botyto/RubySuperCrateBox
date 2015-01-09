@@ -1,14 +1,20 @@
 require_relative "gameObject.rb"
 
 class Enemy < GameObject
+  def initialize
+    super
+  end
 end
 
 class Spawner < GameObject
+  def initialize
+    super
+  end
 end
 
-class Fire < Enemy
-  def intialize(position)
-    super position
-    @sprite = ResourceManager.sprites["fire"]
+class Fire < GameObject
+  def initialize
+    super
+    set_sprite "fire"
   end
 end

@@ -11,12 +11,25 @@ class SceneManager
     end
 
     def add_object(object)
+      if object.is_a? Class then
+        @objects.push object.new
+        puts "adding #{object}" if LOG
+      else
+        @objects.push object
+        puts "adding #{object.class}" if LOG
+      end
+    end
+
+    def add_object(klass, position)
+      object = klass.new
+      object.set_position position
       @objects.push object
       puts "adding #{object.class}" if LOG
     end
 
     def update
       @objects.each { |object| object.update }
+      
       size = @objects.size if LOG
       @objects = @objects.keep_if { |object| object.active }
       puts "removing #{size - @objects.size}" if LOG and size != @objects.size
