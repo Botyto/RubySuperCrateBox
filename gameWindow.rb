@@ -59,6 +59,11 @@ class GameWindow < Window
     #GameWindow.clear
     #GameWindow.move_home
 
+    if SceneManager.background_color then
+      col = SceneManager.background_color
+      draw_quad(0, 0, col, width, 0, col, width, height, col, 0, height, col, 0, :default) 
+    end
+
     translate(-@camera.x, -@camera.y) do
       SceneManager.draw
     end
@@ -73,5 +78,9 @@ class GameWindow < Window
   
   def button_up(button)
     SceneManager.button_released button
+  end
+
+  def needs_cursor?
+    true
   end
 end

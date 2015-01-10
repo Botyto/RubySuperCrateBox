@@ -3,11 +3,12 @@ require_relative "common.rb"
 class SceneManager
   class << self
     attr_reader :objects
-    attr_accessor :current_level
+    attr_accessor :current_level, :background_color
 
     def initialize
       @objects = Array.new
       @current_level = nil
+      @background_color = Color.new(255, 180, 212, 238)
     end
 
     def add_object(object)
