@@ -1,5 +1,5 @@
 name:fire.bmp
-tiled:false:bool
+tiled:true:bool
 width:10:int
 height:10:int
 z:-1:int

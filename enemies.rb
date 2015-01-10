@@ -16,5 +16,6 @@ class Fire < GameObject
   def initialize
     super
     set_sprite "fire"
+    @animation_speed = 0.2
   end
 end

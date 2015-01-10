@@ -2,15 +2,18 @@ require_relative "resourceManager.rb"
 require_relative "common.rb"
 
 class GameObject
-  attr_accessor :position, :velocity, :gravity, :angle, :frame, :solid
+  attr_accessor :position, :velocity, :gravity, :angle, :frame, :solid,
+      :animation_speed
   attr_reader :active, :sprite
 
   def initialize
       @position = Point.new
       @velocity = Point.new
       @gravity = 0
+
       @angle = 0
       @frame = 0
+      @animation_speed = 1
       set_sprite nil
       
       @active = true
@@ -18,7 +21,7 @@ class GameObject
 
   def update
     # update 
-    @frame += 1
+    @frame += @animation_speed
 
     # update movement & position
     @velocity.y += @gravity

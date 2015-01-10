@@ -1,4 +1,4 @@
-LOG = true
+require_relative "common.rb"
 
 class SceneManager
   class << self
@@ -13,10 +13,10 @@ class SceneManager
     def add_object(object)
       if object.is_a? Class then
         @objects.push object.new
-        puts "adding #{object}" if LOG
+        debug_log "Add #{object}"
       else
         @objects.push object
-        puts "adding #{object.class}" if LOG
+        debug_log "Add #{object.class}"
       end
     end
 
@@ -24,15 +24,15 @@ class SceneManager
       object = klass.new
       object.set_position position
       @objects.push object
-      puts "adding #{object.class}" if LOG
+      debug_log "Add #{object.class}"
     end
 
     def update
       @objects.each { |object| object.update }
-      
-      size = @objects.size if LOG
+
+      size = @objects.size
       @objects = @objects.keep_if { |object| object.active }
-      puts "removing #{size - @objects.size}" if LOG and size != @objects.size
+      debug_log "Remove #{size - @objects.size} objects" if size != @objects.size
     end
 
     def draw

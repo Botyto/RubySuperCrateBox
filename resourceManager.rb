@@ -19,6 +19,10 @@ GRAY    = 37
 class Sprite
   attr_accessor :name, :image, :tiled, :z, :width, :height, :color, :ascii
 
+  def num_frames
+    @image.size
+  end
+
   def aabb(offset = Point.new)
     Rectangle.new(-@width/2, -@height/2, @width, @height) + offset
   end
@@ -35,7 +39,7 @@ class Sprite
 
   def draw_frame(frame, x, y, z, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
     if tiled then
-      image[frame].draw(x, y, z, factor_x, factor_y, color, mode) 
+      image[frame.floor % num_frames].draw(x, y, z, factor_x, factor_y, color, mode) 
     else
       image.draw(x, y, z, factor_x, factor_y, color, mode)
     end
@@ -44,7 +48,7 @@ class Sprite
 
   def draw_rot_frame(frame, x, y, z, angle, center_x = 0.5, center_y = 0.5, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default) 
     if tiled then
-      image[frame].draw_rot(x, y, z, angle, center_x, center_y, factor_x, factor_y, color, mode) 
+      image[frame.floor % num_frames].draw_rot(x, y, z, angle, center_x, center_y, factor_x, factor_y, color, mode) 
     else
       image.draw_rot(x, y, z, angle, center_x, center_y, factor_x, factor_y, color, mode) 
     end
@@ -106,6 +110,7 @@ class ResourceManager
           end
         end
       end
+      debug_log "Load level \"#{filename}\""
     end
     
     def load_sprite_file(filename)
@@ -123,10 +128,13 @@ class ResourceManager
       end
 
       @sprites[filename] = sprite
+      debug_log "Load sprite \"#{filename}\""
+      debug_log sprite
     end
 
     def load_sound_file(filename)
       # not implemented
+      debug_log "Load sound \"#{filename}\""
     end
   end
 end

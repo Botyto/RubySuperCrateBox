@@ -1,3 +1,5 @@
+LOG = true
+
 class Point
   attr_accessor :x, :y
   
@@ -108,7 +110,7 @@ def parse_class(filename, klass)
       when "int"
         result.send "#{name}=", value.to_i
       when "bool"
-        result.send "#{name}=", value == true
+        result.send "#{name}=", value == "true"
       when "sym"
         result.send "#{name}=", value.to_sym
       when "nil"
@@ -119,4 +121,14 @@ def parse_class(filename, klass)
   end
 
   result
+end
+
+def debug_log(content)
+  return if !LOG
+
+  if content.is_a? String then
+    puts content
+  else
+    puts "\n" + content.inspect + "\n\n"
+  end
 end
