@@ -1,4 +1,5 @@
 type:
 file:
 background:
+music:
 spawn_interval::int

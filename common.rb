@@ -6,13 +6,16 @@ GRID_HEIGHT = 10
 EXT_LEVEL  = ".lvl"
 EXT_SCENE  = ".scn"
 EXT_SPRITE = ".spr"
-EXT_SOUND  = ".mp3"
+EXT_SOUND  = ".snd"
 EXT_WEAPON = ".wep"
+
 DATA       = "data/"
 DATA_WEP   = "data/weapons/"
 
 TYPE_LEVEL = "level"
 TYPE_MENU  = "menu"
+TYPE_SONG  = "song"
+TYPE_SFX   = "sfx"
 
 DEFAULT = 0
 RED     = 31

@@ -2,18 +2,21 @@ require_relative "resourceManager.rb"
 require_relative "common.rb"
 
 class Scene
-  attr_accessor :type, :file, :background, :spawn_interval, :level, :menu_items
+  attr_accessor :type, :file, :background, :music, :spawn_interval, :level, :menu_items
   attr_reader :background_sprite
 
   def initialize
     @level = nil
     @menu_items = nil
+    @background_sprite = nil
+    @background_music = nil
   end
 
   def parse
     parse_level
     parse_menu
     @background_sprite = ResourceManager.sprites[@background]
+    @background_music = ResourceManager.sounds[@music]
   end
 
   def parse_level
@@ -50,11 +53,17 @@ class Scene
   end
 
   def start
+    @background_music.play if @background_music != nil
+
     if @type == TYPE_LEVEL && @level then
       @level.start
     elsif @type == TYPE_MENU && @menu_items then
       debug_log "Start menu scene NOT IMPLEMENTED"
     end
+  end
+
+  def end
+    @background_music.stop if @background_music != nil
   end
 end
 
@@ -114,9 +123,11 @@ class SceneManager
     end
 
     def start_scene(scene)
+      @current_scene.end if @current_scene
       clear
       scene.start
       @current_scene = scene
+      debug_log "Changing scene"
     end
   end
 end

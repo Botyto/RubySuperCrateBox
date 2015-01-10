@@ -2,6 +2,39 @@ require_relative "common.rb"
 require_relative "level.rb"
 require_relative "gameWindow.rb"
 
+class Sound
+  attr_accessor :type, :file
+  attr_reader :sound
+
+  def load
+    if @type == TYPE_SONG then
+      @sound = Song.new(GameWindow.game, DATA + file)
+    elsif @type == TYPE_SFX then
+      @sound = Sample.new(GameWindow.game, DATA + file)
+    end
+  end
+
+  def play
+    if @type == TYPE_SONG then
+      @sound.play true
+      debug_log "Playing song"
+    elsif @type == TYPE_SFX then
+      @sound.play
+      debug_log "Playing sfx"
+    end
+  end
+
+  def pause
+    @sound.pause if @type == TYPE_SONG and !@sound.playing?
+    debug_log "Pause sound"
+  end
+
+  def stop
+    @sound.stop if @type == TYPE_SONG and !@sound.playing?
+    debug_log "Stop sound"
+  end
+end
+
 class Sprite
   attr_accessor :name, :image, :tiled, :z, :width, :height, :color, :ascii
 
@@ -63,7 +96,7 @@ class ResourceManager
     def generate_filenames
       @scene_filenames  = ["level1"]
       @sprite_filenames = ["wall", "player", "fire", "enemy", "crate", "bullet", "back_level1"]
-      @sound_filenames  = []
+      @sound_filenames  = ["gameplay1"]
     end
 
     def load
@@ -82,7 +115,6 @@ class ResourceManager
     def load_scene_file(filename)
       scene = parse_class(DATA + filename + EXT_SCENE, Scene)
       scene.parse
-      debug_log "Parse scene \"#{filename}\""
       @scenes[filename] = scene
       debug_log "Load scene \"#{filename}\""
     end
@@ -107,7 +139,9 @@ class ResourceManager
     end
 
     def load_sound_file(filename)
-      # not implemented
+      sound = parse_class(DATA + filename + EXT_SOUND, Sound)
+      sound.load
+      @sounds[filename] = sound
       debug_log "Load sound \"#{filename}\""
     end
   end
