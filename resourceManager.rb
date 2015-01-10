@@ -32,11 +32,11 @@ class Sprite
     draw_ascii x, y
   end
 
-  def draw_rot_frame(frame, x, y, z, angle, center_x = 0.5, center_y = 0.5, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default) 
+  def draw_rot_frame(frame, x, y, z, angle, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default) 
     if tiled then
-      image[frame.floor % num_frames].draw_rot(x, y, z, angle, center_x, center_y, factor_x, factor_y, color, mode) 
+      image[frame.floor % num_frames].draw_rot(x, y, z, angle, 0.5, 0.5, factor_x, factor_y, color, mode) 
     else
-      image.draw_rot(x, y, z, angle, center_x, center_y, factor_x, factor_y, color, mode) 
+      image.draw_rot(x, y, z, angle, 0.5, 0.5, factor_x, factor_y, color, mode) 
     end
     draw_ascii x, y
   end
@@ -46,8 +46,8 @@ class Sprite
     draw_ascii x, y
   end
 
-  def draw_rot(x, y, z, angle, center_x = 0.5, center_y = 0.5, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default) 
-    image.draw_rot(x, y, z, angle, center_x, center_y, factor_x, factor_y, color, mode) 
+  def draw_rot(x, y, z, angle, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default) 
+    image.draw_rot(x, y, z, angle, 0.5, 0.5, factor_x, factor_y, color, mode) 
     draw_ascii x, y
   end
 end
@@ -62,7 +62,7 @@ class ResourceManager
 
     def generate_filenames
       @scene_filenames  = ["level1"]
-      @sprite_filenames = ["wall", "player", "fire", "enemy", "crate", "bullet"]
+      @sprite_filenames = ["wall", "player", "fire", "enemy", "crate", "bullet", "back_level1"]
       @sound_filenames  = []
     end
 
@@ -74,15 +74,15 @@ class ResourceManager
       @sounds = Hash.new
       @scenes = Hash.new
       
-      @scene_filenames.each  { |file| load_scene_file (file) }
       @sprite_filenames.each { |file| load_sprite_file(file) }
       @sound_filenames.each  { |file| load_sound_file (file) }
+      @scene_filenames.each  { |file| load_scene_file (file) }
     end
     
     def load_scene_file(filename)
       scene = parse_class(DATA + filename + EXT_SCENE, Scene)
       scene.parse
-      debug_log "Parse scene #{filename}"
+      debug_log "Parse scene \"#{filename}\""
       @scenes[filename] = scene
       debug_log "Load scene \"#{filename}\""
     end

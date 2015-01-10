@@ -1,7 +1,9 @@
+require_relative "resourceManager.rb"
 require_relative "common.rb"
 
 class Scene
   attr_accessor :type, :file, :background, :spawn_interval, :level, :menu_items
+  attr_reader :background_sprite
 
   def initialize
     @level = nil
@@ -11,6 +13,7 @@ class Scene
   def parse
     parse_level
     parse_menu
+    @background_sprite = ResourceManager.sprites[@background]
   end
 
   def parse_level
@@ -41,6 +44,11 @@ class Scene
     debug_log "Parse menu \"#{@file}\" NOT IMPLEMENTED"
   end
 
+  def draw
+    return if !@background_sprite
+    @background_sprite.draw(0, 0, 1)
+  end
+
   def start
     if @type == TYPE_LEVEL && @level then
       @level.start
@@ -64,7 +72,7 @@ class SceneManager
     def add_object(object)
       obj = object.is_a? Class ? object.new : object
       @objects.push obj
-      debug_log "Add #{object.class}"
+      debug_log "Add \"#{object.class}\""
       obj
     end
 
@@ -72,7 +80,7 @@ class SceneManager
       object = klass.new
       object.set_position position
       @objects.push object
-      debug_log "Add #{object.class}"
+      debug_log "Add \"#{object.class}\""
       object
     end
 
@@ -81,10 +89,11 @@ class SceneManager
 
       size = @objects.size
       @objects = @objects.keep_if { |object| object.active }
-      debug_log "Remove #{size - @objects.size} objects" if size != @objects.size
+      debug_log "Remove #{size - @objects.size} object(s)" if size != @objects.size
     end
 
     def draw
+      @current_scene.draw
       @objects.each { |object| object.draw }
     end
 
