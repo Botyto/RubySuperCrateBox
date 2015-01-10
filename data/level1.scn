@@ -1,0 +1,4 @@
+type:level
+file:1.lvl
+background:back_level1
+spawn_interval:60:int

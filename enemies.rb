@@ -13,7 +13,7 @@ class Enemy < GameObject
   def update
     super
 
-    destroy if @position.y > SceneManager.current_level.height*10
+    destroy if @position.y > GameWindow.height
   end
 
   def collide(other)
@@ -26,7 +26,11 @@ end
 
 class Spawner < GameObject
   def spawn_interval
-    60 * 2
+    if SceneManager.current_scene then
+      SceneManager.current_scene.spawn_interval
+    else
+      60*2
+    end
   end
 
   def initialize

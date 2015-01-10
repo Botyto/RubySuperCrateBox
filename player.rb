@@ -18,7 +18,7 @@ class Player < GameObject
 
     if !@alive then
       @angle += 10
-      destroy if @position.y > SceneManager.current_level.height*10
+      destroy if @position.y > GameWindow.height
     end
   end
 

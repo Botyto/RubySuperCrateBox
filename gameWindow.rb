@@ -10,7 +10,15 @@ include Gosu
 class GameWindow < Window
   class << self
     def game
-      @@game 
+      @@game
+    end
+
+    def bounds
+      @@bounds
+    end
+
+    def point_inside?(point)
+      @@bounds.point_inside? point
     end
 
     def clear
@@ -36,17 +44,26 @@ class GameWindow < Window
     def move_cursor(x, y)
       # not implemented
     end
+
+    def height
+      @@game.height
+    end
+
+    def width
+      @@game.width
+    end
   end
 
   def initialize
     super(26*10, 18*10, false)
     @caption = "Ruby Super Crate Box"
+    @@bounds = Rectangle.new(0, 0, 26*10, 18*10)
     @@game = self
     
     ResourceManager.initialize self
     ResourceManager.load
     SceneManager.initialize
-    SceneManager.activate_level(ResourceManager.levels["1"])
+    SceneManager.start_scene(ResourceManager.scenes["level1"])
     
     @camera = Point.new
   end

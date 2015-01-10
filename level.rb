@@ -2,9 +2,6 @@ require_relative "common.rb"
 require_relative "player.rb"
 require_relative "enemies.rb"
 
-GRID_WIDTH = 10
-GRID_HEIGHT = 10
-
 class Level
   attr_reader :player, :spawn_points, :fires, :walls, :width, :height
 
@@ -50,7 +47,7 @@ class Level
     @walls[x][y]
   end
   
-  def activate()
+  def start
     SceneManager.add_object(Player, @player)
     @spawn_points.each { |spawn| SceneManager.add_object(Spawner, spawn) }
     @fires.each { |fire| SceneManager.add_object(Fire, fire) }

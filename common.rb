@@ -1,3 +1,26 @@
+require_relative "gameWindow.rb" 
+
+GRID_WIDTH = 10
+GRID_HEIGHT = 10
+
+EXT_LEVEL  = ".lvl"
+EXT_SCENE  = ".scn"
+EXT_SPRITE = ".spr"
+EXT_SOUND  = ".mp3"
+DATA       = "data/"
+
+TYPE_LEVEL = "level"
+TYPE_MENU  = "menu"
+
+DEFAULT = 0
+RED     = 31
+GREEN   = 32
+YELLOW  = 33
+BLUE    = 34
+MAGENTA = 35
+CYAN    = 36
+GRAY    = 37
+
 LOG = true
 GRAVITY = 0.1
 
@@ -124,12 +147,20 @@ def parse_class(filename, klass)
   result
 end
 
+class String
+  def to_class
+    split('::').inject Object { |o, c| o.const_get c }
+  end
+end
+
 def debug_log(content)
   return if !LOG
 
+  GameWindow.set_color YELLOW
   if content.is_a? String then
     puts content
   else
     puts "\n" + content.inspect + "\n\n"
   end
+  GameWindow.reset_color
 end

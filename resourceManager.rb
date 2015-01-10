@@ -2,20 +2,6 @@ require_relative "common.rb"
 require_relative "level.rb"
 require_relative "gameWindow.rb"
 
-EXT_LEVEL  = ".txt"
-EXT_SPRITE = ".txt"
-EXT_SOUND  = ".mp3"
-DATA       = "data/"
-
-DEFAULT = 0
-RED     = 31
-GREEN   = 32
-YELLOW  = 33
-BLUE    = 34
-MAGENTA = 35
-CYAN    = 36
-GRAY    = 37
-
 class Sprite
   attr_accessor :name, :image, :tiled, :z, :width, :height, :color, :ascii
 
@@ -68,14 +54,14 @@ end
 
 class ResourceManager
   class << self
-    attr_reader :levels, :sprites, :sounds, :game
+    attr_reader :sprites, :sounds, :scenes, :game
     
     def initialize(game)
       @game = game
     end
 
     def generate_filenames
-      @level_filenames  = ["1"]
+      @scene_filenames  = ["level1"]
       @sprite_filenames = ["wall", "player", "fire", "enemy", "crate"]
       @sound_filenames  = []
     end
@@ -86,31 +72,19 @@ class ResourceManager
       @levels = Hash.new
       @sprites = Hash.new
       @sounds = Hash.new
+      @scenes = Hash.new
       
-      @level_filenames.each  { |file| load_level_file (file) }
+      @scene_filenames.each  { |file| load_scene_file (file) }
       @sprite_filenames.each { |file| load_sprite_file(file) }
       @sound_filenames.each  { |file| load_sound_file (file) }
     end
     
-    def load_level_file(filename)
-      lines = File.readlines(DATA + filename + EXT_LEVEL).map &:chomp
-      level = Level.new(lines.first.size, lines.size)
-      @levels[filename] = level
-      for x in 0...level.width
-        for y in 0...level.height
-          case lines[y][x]
-            when "#"
-              level.set_blocked(x, y)
-            when "S"
-              level.add_spawn(x, y)
-            when "P"
-              level.set_player(x, y)
-            when "F"
-              level.add_fire(x, y)
-          end
-        end
-      end
-      debug_log "Load level \"#{filename}\""
+    def load_scene_file(filename)
+      scene = parse_class(DATA + filename + EXT_SCENE, Scene)
+      scene.parse
+      debug_log "Parse scene #{filename}"
+      @scenes[filename] = scene
+      debug_log "Load scene \"#{filename}\""
     end
     
     def load_sprite_file(filename)
