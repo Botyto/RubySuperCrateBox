@@ -1,0 +1,10 @@
+name:Machinegun
+sprite:machinegun
+shot_object:Bullet:class
+level:0:int
+can_hold:true:bool
+interval:8:int
+shots:1:int
+push:0:int
+spread:5:int
+shot_speed:5:int

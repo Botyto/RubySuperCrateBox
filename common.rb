@@ -7,7 +7,9 @@ EXT_LEVEL  = ".lvl"
 EXT_SCENE  = ".scn"
 EXT_SPRITE = ".spr"
 EXT_SOUND  = ".mp3"
+EXT_WEAPON = ".wep"
 DATA       = "data/"
+DATA_WEP   = "data/weapons/"
 
 TYPE_LEVEL = "level"
 TYPE_MENU  = "menu"
@@ -69,6 +71,11 @@ class Point
     @x = (@x/w).round * w
     @y = (@y/h).round * h
   end
+
+  def self.angle_len(degrees, length)
+    radians = deg_to_rad degrees
+    Point.new(Math.cos(radians)*length, -Math.sin(radians)*length)
+  end
 end
 
 class Rectangle
@@ -122,13 +129,19 @@ class Rectangle
   end
 end
 
+def deg_to_rad(degrees)
+  degrees*Math::PI/180
+end
+
 def parse_class(filename, klass)
   lines = File.readlines(filename).map &:chomp
   result = klass.new
 
   lines.each do |line|
-    name, value, type = *(line.split ':')
+    name, value, type = *(line.strip.split ':')
     case type
+      when "class"
+        result.send "#{name}=", value.to_class
       when "exec"
         result.send "#{name}=value"
       when "int"
@@ -149,7 +162,7 @@ end
 
 class String
   def to_class
-    split('::').inject Object { |o, c| o.const_get c }
+    split('::').inject(Object) { |o, c| o.const_get c }
   end
 end
 

@@ -4,6 +4,7 @@ require "gosu"
 require_relative "sceneManager.rb"
 require_relative "resourceManager.rb"
 require_relative "common.rb"
+require_relative "player.rb"
 
 include Gosu
 
@@ -62,6 +63,7 @@ class GameWindow < Window
     
     ResourceManager.initialize self
     ResourceManager.load
+    Player.initialize_weapons
     SceneManager.initialize
     SceneManager.start_scene(ResourceManager.scenes["level1"])
     

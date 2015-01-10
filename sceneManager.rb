@@ -62,13 +62,10 @@ class SceneManager
     end
 
     def add_object(object)
-      if object.is_a? Class then
-        @objects.push object.new
-        debug_log "Add #{object}"
-      else
-        @objects.push object
-        debug_log "Add #{object.class}"
-      end
+      obj = object.is_a? Class ? object.new : object
+      @objects.push obj
+      debug_log "Add #{object.class}"
+      obj
     end
 
     def add_object(klass, position)
@@ -76,6 +73,7 @@ class SceneManager
       object.set_position position
       @objects.push object
       debug_log "Add #{object.class}"
+      object
     end
 
     def update

@@ -1,0 +1,10 @@
+name:
+sprite:
+shot_object::class
+level::int
+can_hold::bool
+interval::int
+shots::int
+push::int
+spread::int
+shot_speed::int

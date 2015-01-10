@@ -7,6 +7,7 @@ class Enemy < GameObject
   def initialize
     super
     set_sprite "enemy"
+    @velocity.y = 1
     @gravity = GRAVITY
   end
 

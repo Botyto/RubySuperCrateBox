@@ -62,7 +62,7 @@ class ResourceManager
 
     def generate_filenames
       @scene_filenames  = ["level1"]
-      @sprite_filenames = ["wall", "player", "fire", "enemy", "crate"]
+      @sprite_filenames = ["wall", "player", "fire", "enemy", "crate", "bullet"]
       @sound_filenames  = []
     end
 

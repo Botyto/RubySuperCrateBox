@@ -1,4 +1,5 @@
 require_relative "resourceManager.rb"
+require_relative "sceneManager.rb"
 require_relative "common.rb"
 
 class GameObject
@@ -99,9 +100,14 @@ class GameObject
     Math.atan2(@velocity.x, @velocity.y)
   end
 
-  def direction=(new_angle)
-    new_x =  Math.cos(new_angle) * speed
-    new_y = -Math.sin(new_angle) * speed
+  def direction=(degrees)
+    radians = deg_to_rad degrees
+    new_x =  Math.cos(radians) * speed
+    new_y = -Math.sin(radians) * speed
     @velocity.x, @velocity.y = new_x, new_y
+  end
+
+  def inside_scene?
+    SceneManager.point_inside? position
   end
 end

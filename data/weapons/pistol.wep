@@ -1,0 +1,10 @@
+name:Pistol
+sprite:pistol
+shot_object:Bullet:class
+level:0:int
+can_hold:false:bool
+interval:5:int
+shots:1:int
+push:0:int
+spread:0:int
+shot_speed:5:int
