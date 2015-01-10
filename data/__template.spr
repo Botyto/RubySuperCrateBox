@@ -1,0 +1,7 @@
+name:
+tiled::bool
+width::int
+height::int
+z::int
+color::int
+ascii::string
