@@ -32,3 +32,10 @@ class Player < GameObject
     @angle = 0
   end
 end
+
+class Crate < GameObject
+  def initialize
+    super
+    set_sprite "crate"
+  end
+end
