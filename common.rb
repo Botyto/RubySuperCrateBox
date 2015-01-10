@@ -1,4 +1,5 @@
 LOG = true
+GRAVITY = 0.1
 
 class Point
   attr_accessor :x, :y

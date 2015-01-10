@@ -2,6 +2,6 @@ name:enemy.bmp
 tiled:true:bool
 width:10:int
 height:10:int
-z:-2:int
+z:200:int
 color:32:int
 ascii::string

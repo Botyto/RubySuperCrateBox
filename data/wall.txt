@@ -2,6 +2,6 @@ name:wall.bmp
 tiled:false:bool
 width:10:int
 height:10:int
-z:0:int
+z:100:int
 color:31:int
 ascii::string

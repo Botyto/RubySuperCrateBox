@@ -1,21 +1,26 @@
 require_relative "gameObject.rb"
 require_relative "sceneManager.rb"
+require_relative "player.rb"
+require_relative "common.rb"
 
 class Enemy < GameObject
   def initialize
     super
     set_sprite "enemy"
-    @gravity = 0.1
+    @gravity = GRAVITY
   end
 
   def update
     super
 
-    kill if @position.y > SceneManager.current_level.height*10
+    destroy if @position.y > SceneManager.current_level.height*10
   end
 
-  def kill
-    @active = false
+  def collide(other)
+    case other
+      when Player
+        other.kill if other.alive
+    end
   end
 end
 

@@ -2,6 +2,6 @@ name:player.bmp
 tiled:false:bool
 width:10:int
 height:10:int
-z:1:int
+z:450:int
 color:33:int
 ascii::string

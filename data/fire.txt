@@ -2,6 +2,6 @@ name:fire.bmp
 tiled:true:bool
 width:10:int
 height:10:int
-z:-1:int
+z:500:int
 color:31:int
 ascii::string
