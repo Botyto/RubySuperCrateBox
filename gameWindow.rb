@@ -8,6 +8,9 @@ require_relative "player.rb"
 
 include Gosu
 
+WIDTH = 26
+HEIGHT = 18
+
 class GameWindow < Window
   class << self
     def game
@@ -56,9 +59,9 @@ class GameWindow < Window
   end
 
   def initialize
-    super(26*10, 18*10, false)
+    super((WIDTH-2)*GRID_WIDTH, (HEIGHT-2)*GRID_HEIGHT, false)
     @caption = "Ruby Super Crate Box"
-    @@bounds = Rectangle.new(0, 0, 26*10, 18*10)
+    @@bounds = Rectangle.new(GRID_WIDTH, GRID_HEIGHT, (WIDTH-2)*GRID_WIDTH, (HEIGHT-2)*GRID_HEIGHT)
     @@game = self
     
     ResourceManager.initialize self
@@ -67,23 +70,34 @@ class GameWindow < Window
     SceneManager.initialize
     SceneManager.start_scene(ResourceManager.scenes["level1"])
     
-    @camera = Point.new
+    @shake = 10
+    @camera = Point.new(GRID_WIDTH, GRID_HEIGHT)
   end
 
   def update
     SceneManager.update
   end
   
+  def shake(amount)
+    @shake = amount
+  end
+
+  def stop_shaking
+    @shake = 0
+  end
+
   def draw
     #GameWindow.clear
     #GameWindow.move_home
 
-    if SceneManager.background_color then
-      col = SceneManager.background_color
-      draw_quad(0, 0, col, width, 0, col, width, height, col, 0, height, col, 0, :default) 
+    # shake the camera
+    @offset = @camera
+    if @shake > 0 then
+      @offset += Point.new(rand(-@shake..@shake), -rand(@shake))
     end
 
-    translate(-@camera.x, -@camera.y) do
+    # translate the camera and draw everything
+    translate(-@offset.x, -@offset.y) do
       SceneManager.draw
     end
 
