@@ -7,5 +7,7 @@ can_hold:false:bool
 interval:5:int
 shots:1:int
 push:0:int
+shake:0:int
 spread:0:int
 shot_speed:5:int
+shot_speed_offset:0:int

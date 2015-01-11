@@ -53,30 +53,58 @@ class Point
   end
   
   def *(number)
-    @x *= number
-    @y *= number
+    Point.new(@x*number, @y*number)
   end
   
   def /(number)
-    @x /= number
-    @y /= number
+    Point.new(@x/number, @y/number)
   end
   
+  def self.zero
+    Point.new
+  end
+
+  def self.one
+    Point.new(1, 1)
+  end
+
+  def normalize
+    self/length
+  end
+
   def length
     Math.sqrt(@x*@x + @y*@y)
   end
+
+  def length=(new_length)
+    old_length = length
+    @x *= new_length/old_length
+    @y *= new_length/old_length
+  end
+
+  def angle
+    Math.atan2(@velocity.x, @velocity.y)
+  end
+
+  def rotate(degrees)
+    radians = deg_to_rad(degrees)
+    @x = Math.cos(radians)*length
+    @y = -Math.sin(radians)*length
+  end
+
+  alias :angle= :rotate
   
   def snap_to_grid(w, h)
-    Point.new((@x/w).round * w, (@y/h).round * h)
+    Point.new((@x/w).round*w, (@y/h).round*h)
   end
   
   def snap_to_grid!(w, h)
-    @x = (@x/w).round * w
-    @y = (@y/h).round * h
+    @x = (@x/w).round*w
+    @y = (@y/h).round*h
   end
 
   def self.angle_len(degrees, length)
-    radians = deg_to_rad degrees
+    radians = deg_to_rad(degrees)
     Point.new(Math.cos(radians)*length, -Math.sin(radians)*length)
   end
 end
@@ -173,14 +201,14 @@ def parse_class(filename, klass)
   result
 end
 
-def debug_log(content)
+def debug_log(content, color = YELLOW)
   return if !LOG
 
-  GameWindow.set_color YELLOW
+  GameWindow.set_color color
   if content.is_a? String then
     puts content
   else
-    puts "\n" + content.inspect + "\n\n"
+    puts content.inspect
   end
   GameWindow.reset_color
 end

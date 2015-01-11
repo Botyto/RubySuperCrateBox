@@ -81,7 +81,7 @@ class SceneManager
     def add_object(object)
       obj = object.is_a? Class ? object.new : object
       @objects.push obj
-      debug_log "Add \"#{object.class}\""
+      debug_log("Add \"#{object.class}\"", CYAN)
       obj
     end
 
@@ -89,7 +89,7 @@ class SceneManager
       object = klass.new
       object.set_position position
       @objects.push object
-      debug_log "Add \"#{object.class}\""
+      debug_log("Add \"#{object.class}\"", CYAN)
       object
     end
 
@@ -98,7 +98,7 @@ class SceneManager
 
       size = @objects.size
       @objects = @objects.keep_if { |object| object.active }
-      debug_log "Remove #{size - @objects.size} object(s)" if size != @objects.size
+      debug_log("Remove #{size - @objects.size} object(s)", RED) if size != @objects.size
     end
 
     def draw
@@ -127,7 +127,7 @@ class SceneManager
       clear
       scene.start
       @current_scene = scene
-      debug_log "Changing scene"
+      debug_log("Changing scene", MAGENTA)
     end
 
     def solid_free?(aabb)

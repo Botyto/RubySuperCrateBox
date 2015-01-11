@@ -28,7 +28,7 @@ class Player < GameObject
     @alive = true
     @level = 5
     @shooting = false
-    @weapon = @@weapons["machinegun"]
+    @weapon = @@weapons["shotgun"]
   end
 
   def update

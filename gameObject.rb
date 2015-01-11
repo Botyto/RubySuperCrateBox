@@ -11,6 +11,7 @@ class GameObject
       @position = Point.new
       @velocity = Point.new
       @gravity = 0
+      @friction = 0
 
       @angle = 0
       @frame = 0
@@ -25,6 +26,11 @@ class GameObject
     @frame += @animation_speed
 
     # update movement & position
+    if speed > @friction then
+      @velocity.length -= @friction
+    else
+      @velocity = Point.zero
+    end
     @velocity.y += @gravity
     @position += @velocity
 
@@ -33,7 +39,8 @@ class GameObject
   end
 
   def aabb
-    @sprite.aabb position
+    return @sprite.aabb position if @sprite
+    Rectangle.new
   end
 
   def handle_collisions
@@ -76,6 +83,10 @@ class GameObject
     end
   end
 
+  def set_speed(new_speed)
+    @velocity.length = new_speed
+  end
+
   def destroy
     @active = false
   end
@@ -87,24 +98,19 @@ class GameObject
   end
 
   def speed
-    velocity.length
+    @velocity.length
   end
 
   def speed=(new_speed)
-    old_speed = speed
-    @velocity.x *= new_speed / old_speed
-    @velocity.y *= new_speed / old_speed
+    @velocity *= new_speed/speed
   end
 
   def direction
-    Math.atan2(@velocity.x, @velocity.y)
+    @velocity.angle
   end
 
   def direction=(degrees)
-    radians = deg_to_rad degrees
-    new_x =  Math.cos(radians) * speed
-    new_y = -Math.sin(radians) * speed
-    @velocity.x, @velocity.y = new_x, new_y
+    @velocity.angle = degrees
   end
 
   def inside_scene?

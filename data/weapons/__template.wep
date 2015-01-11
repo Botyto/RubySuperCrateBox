@@ -7,5 +7,7 @@ can_hold::bool
 interval::int
 shots::int
 push::int
+shake::int
 spread::int
 shot_speed::int
+shot_speed_offset::int

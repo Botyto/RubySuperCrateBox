@@ -2,7 +2,7 @@ require_relative "gameObject.rb"
 
 class Weapon
   attr_accessor :name, :sprite, :sound, :shot_object, :level, :can_hold, :interval, :shots,
-        :push, :spread, :shot_speed
+        :push, :shake, :spread, :shot_speed, :shot_speed_offset
   attr_reader :timer
 
   def self.all_weapons
@@ -28,13 +28,16 @@ class Weapon
     return if !@shot_object
 
     @timer = @interval
-    ResourceManager.sounds[@sound].play if @sound
+    ResourceManager.sounds[@sound].play if ResourceManager.sounds[@sound]
+    GameWindow.game.shake @shake
+
 
     @shots.times do
       shot = SceneManager.add_object @shot_object, position
 
       if @shot_speed and @shot_speed > 0 then
-        shot.velocity = Point.angle_len(rand(@spread), @shot_speed)
+        shot.velocity = Point.angle_len(rand(-@spread..@spread),
+                                        @shot_speed + rand(@shot_speed_offset))
         shot.velocity.x *= direction
       end
     end
@@ -73,7 +76,29 @@ class Bullet < GameObject
 
   def update
     super
+
     destroy if !inside_scene? or !SceneManager.solid_free? aabb
+  end
+
+  def collide(other)
+    case other
+    when Enemy
+      other.destory
+    end
+  end
+end
+
+class ShotgunBullet < GameObject
+  def initialize
+    super
+    set_sprite "bullet"
+    @friction = 0.5
+  end
+
+  def update
+    super
+
+    destroy if !inside_scene? or !SceneManager.solid_free? aabb or speed <= 0
   end
 
   def collide(other)

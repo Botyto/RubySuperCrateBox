@@ -38,11 +38,11 @@ class GameWindow < Window
     end
 
     def set_color(color)
-      print "\e[#{@color}m"
+      print "\033[#{color}m"
     end
 
     def reset_color
-      print "\e[0m"
+      print "\033[0m"
     end
 
     def move_cursor(x, y)
@@ -92,8 +92,9 @@ class GameWindow < Window
 
     # shake the camera
     @offset = @camera
-    if @shake > 0 then
+    if @shake and @shake > 0 then
       @offset += Point.new(rand(-@shake..@shake), -rand(@shake))
+      stop_shaking
     end
 
     # translate the camera and draw everything

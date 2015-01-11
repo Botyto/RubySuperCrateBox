@@ -96,7 +96,7 @@ class ResourceManager
     def generate_filenames
       @scene_filenames  = ["level1"]
       @sprite_filenames = ["wall", "player", "fire", "enemy", "crate", "bullet", "back_level1"]
-      @sound_filenames  = ["gameplay1", "shot"]
+      @sound_filenames  = [] #["gameplay1", "shot"]
     end
 
     def load
@@ -135,7 +135,6 @@ class ResourceManager
 
       @sprites[filename] = sprite
       debug_log "Load sprite \"#{filename}\""
-      debug_log sprite
     end
 
     def load_sound_file(filename)
