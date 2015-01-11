@@ -1,5 +1,6 @@
 name:
 sprite:
+sound:
 shot_object::class
 level::int
 can_hold::bool

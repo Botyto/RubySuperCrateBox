@@ -1,8 +1,8 @@
 require_relative "gameObject.rb"
 
 class Weapon
-  attr_accessor :name, :sprite, :shot_object, :level, :can_hold, :interval, :shots, :push, :spread,
-        :shot_speed
+  attr_accessor :name, :sprite, :sound, :shot_object, :level, :can_hold, :interval, :shots,
+        :push, :spread, :shot_speed
   attr_reader :timer
 
   def self.all_weapons
@@ -28,6 +28,7 @@ class Weapon
     return if !@shot_object
 
     @timer = @interval
+    ResourceManager.sounds[@sound].play if @sound
 
     @shots.times do
       shot = SceneManager.add_object @shot_object, position
@@ -72,7 +73,7 @@ class Bullet < GameObject
 
   def update
     super
-    destroy if !inside_scene?
+    destroy if !inside_scene? or !SceneManager.solid_free? aabb
   end
 
   def collide(other)

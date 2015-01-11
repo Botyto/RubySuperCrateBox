@@ -1,5 +1,6 @@
 name:Pistol
 sprite:pistol
+sound:shot
 shot_object:Bullet:class
 level:0:int
 can_hold:false:bool

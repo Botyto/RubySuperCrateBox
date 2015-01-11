@@ -132,6 +132,16 @@ class Rectangle
   end
 end
 
+class String
+  def to_class
+    split('::').inject(Object) { |o, c| o.const_get c }
+  end
+end
+
+def clamp(a, x, b)
+  [a, x, b].sort[1]
+end
+
 def deg_to_rad(degrees)
   degrees*Math::PI/180
 end
@@ -161,12 +171,6 @@ def parse_class(filename, klass)
   end
 
   result
-end
-
-class String
-  def to_class
-    split('::').inject(Object) { |o, c| o.const_get c }
-  end
 end
 
 def debug_log(content)

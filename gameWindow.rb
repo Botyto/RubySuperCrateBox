@@ -70,7 +70,7 @@ class GameWindow < Window
     SceneManager.initialize
     SceneManager.start_scene(ResourceManager.scenes["level1"])
     
-    @shake = 10
+    @shake = 0
     @camera = Point.new(GRID_WIDTH, GRID_HEIGHT)
   end
 

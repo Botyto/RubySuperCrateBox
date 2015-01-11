@@ -129,5 +129,28 @@ class SceneManager
       @current_scene = scene
       debug_log "Changing scene"
     end
+
+    def solid_free?(aabb)
+      return true if @current_scene.type == TYPE_MENU
+
+      left   = (aabb.left/GRID_WIDTH).floor
+      right  = (aabb.right/GRID_WIDTH).floor
+      top    = (aabb.top/GRID_HEIGHT).floor
+      bottom = (aabb.bottom/GRID_HEIGHT).floor
+      level = @current_scene.level
+
+      left   = clamp(0, left,   level.width)
+      right  = clamp(0, right,  level.width)
+      top    = clamp(0, top,    level.height)
+      bottom = clamp(0, bottom, level.height)
+
+      (left..right).each do |x|
+        (top..bottom).each do |y|
+          return false if level.blocked? x, y
+        end
+      end
+
+      return true
+    end
   end
 end
