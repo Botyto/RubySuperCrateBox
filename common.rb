@@ -52,12 +52,20 @@ class Point
     end
   end
   
-  def *(number)
-    Point.new(@x*number, @y*number)
+  def *(amount)
+    if amount.is_a? Point then
+      Point.new(@x*amount.x, @y*amount.y)
+    elsif amount.is_a? Numeric then
+      Point.new(@x*amount, @y*amount)
+    end
   end
   
-  def /(number)
-    Point.new(@x/number, @y/number)
+  def /(amount)
+    if amount.is_a? Point then
+      Point.new(@x/amount.x, @y/amount.y)
+    elsif amount.is_a? Numeric then
+      Point.new(@x/amount, @y/amount)
+    end
   end
   
   def self.zero
@@ -106,6 +114,18 @@ class Point
   def self.angle_len(degrees, length)
     radians = deg_to_rad(degrees)
     Point.new(Math.cos(radians)*length, -Math.sin(radians)*length)
+  end
+
+  def self.unit_x
+    Point.new(1, 0)
+  end
+
+  def self.unit_y
+    Point.new(0, 1)
+  end
+
+  def to_s
+    "{X: #{@x}; Y: #{@y}}"
   end
 end
 
@@ -158,11 +178,41 @@ class Rectangle
       Rectangle.new(@x + point.x, @y + point.y, @w, @h)
     end
   end
+
+  def to_s
+    "{X: #{@x}; Y: #{@y}; W: #{@w}; H: #{@h}}"
+  end
+end
+
+class MovementWrapper
+  attr_accessor :movement_to_try, :furthest, :steps_count, :step, :parent
+
+  def initialize(position, destination, gameObject)
+    @movement_to_try = destination - position
+    @furthest = position
+    @steps_count = [@movement_to_try.length.floor, 1].max
+    @step = @movement_to_try/@steps_count
+    @parent = gameObject
+  end
+
+  def bounds(translate)
+    @parent.base_aabb + translate
+  end
+
+  def is_diagonal?
+    @movement_to_try.x != 0 && @movement_to_try.y != 0
+  end
 end
 
 class String
   def to_class
     split('::').inject(Object) { |o, c| o.const_get c }
+  end
+end
+
+class Numeric
+  def sign
+    [0, 1, -1][self <=> 0]
   end
 end
 

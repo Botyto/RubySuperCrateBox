@@ -29,9 +29,25 @@ class Player < GameObject
     @level = 5
     @shooting = false
     @weapon = @@weapons["shotgun"]
+    @gravity = GRAVITY
   end
 
   def update
+    if !SceneManager::solid_free? aabb then
+      if move_collide_solid(@position_previous, @position) then
+        @gravity = 0
+        @velocity.y = 0
+        @position.y = @position.y.ceil
+        while !SceneManager::solid_free? aabb do
+          @position.y -= 1
+        end
+      else
+        @gravity = GRAVITY
+      end
+    else
+      @gravity = GRAVITY
+    end
+
     super
 
     if @alive then
