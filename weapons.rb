@@ -101,3 +101,48 @@ class ShotgunBullet < Bullet
     destroy if speed <= 0
   end
 end
+
+class Rocket < GameObject
+  def initialize
+    super
+    set_sprite "rocket"
+  end
+
+  def update
+    super
+
+    self.speed += 0.2 if self.speed < 10
+  end
+
+  def collide(other)
+    return if !other.is_a? Enemy
+    other.damage 2
+    destroy
+  end
+
+  def destroy
+    super
+    SceneManager.add_object Explosion, @position
+  end
+end
+
+class Explosion < GameObject
+  def initialize
+    super
+    set_sprite "explosion"
+    @animation_speed = 0.1
+    @sprite_scale = Point.new(0.5, 0.5)
+    GameWindow.game.shake 5
+  end
+
+  def update
+    super
+    @sprite_scale += 0.1
+    destroy if @frame > @sprite.num_frames
+  end
+
+  def collide(other)
+    return if !other.is_a? Enemy
+    other.damage 8
+  end
+end

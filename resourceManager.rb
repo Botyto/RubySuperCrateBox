@@ -72,7 +72,8 @@ class Sprite
   attr_accessor :name, :image, :tiled, :z, :width, :height, :color, :ascii
 
   def num_frames
-    @image.size
+    @image.count if @image.is_a? Array
+    1
   end
 
   def aabb(offset = Point.new)
@@ -128,7 +129,7 @@ class ResourceManager
 
     def generate_filenames
       @scene_filenames  = ["level1"]
-      @sprite_filenames = ["wall", "player", "fire", "enemy", "enemy_angry", "crate", "bullet", "back_level1"]
+      @sprite_filenames = ["wall", "player", "fire", "enemy", "enemy_angry", "explosion", "rocket", "crate", "bullet", "back_level1"]
       @sound_filenames  = [] #["gameplay1", "shot"]
       @font_filenames   = ["pixel"]
     end

@@ -1,0 +1,7 @@
+name:explosion.bmp
+tiled:true:bool
+width:60:int
+height:60:int
+z:300:int
+color:0:int
+ascii::string

@@ -1,0 +1,13 @@
+name:Bazooka
+sprite:bazooka
+sound:bazooka
+shot_object:Rocket:class
+level:0:int
+can_hold:false:bool
+interval:80:int
+shots:1:int
+push:0:int
+shake:2:int
+spread:0:int
+shot_speed:0:int
+shot_speed_offset:0:int
