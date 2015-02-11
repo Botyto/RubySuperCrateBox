@@ -60,7 +60,7 @@ class Weapon
   def shoot_pressed(shooter)
     return if !can_shoot? shooter.level
     @can_shoot = false if !@can_hold
-    shoot shooter, shooter.position, 1
+    shoot shooter, shooter.position, shooter.sprite_scale.x
   end
 
   def shoot_released
