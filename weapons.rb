@@ -84,6 +84,7 @@ class Bullet < GameObject
     case other
     when Enemy
       other.damage 2
+      destroy
     end
   end
 end

@@ -121,9 +121,11 @@ class GameObject
     end
   end
 
-  def set_speed(new_speed)
+  def speed=(new_speed)
     @velocity.length = new_speed
   end
+
+  alias :set_speed :speed=
 
   def destroy
     @active = false

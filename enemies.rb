@@ -42,7 +42,7 @@ class Enemy < GameObject
   def collide(other)
     case other
       when Player
-        other.kill
+        other.kill if @health > 0
     end
   end
 

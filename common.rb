@@ -8,6 +8,7 @@ EXT_SCENE  = ".scn"
 EXT_SPRITE = ".spr"
 EXT_SOUND  = ".snd"
 EXT_WEAPON = ".wep"
+EXT_FONT   = ".ttf"
 
 DATA       = "data/"
 DATA_WEP   = "data/weapons/"
@@ -154,6 +155,10 @@ class Point
 
   def self.zero
     Point.new(0, 0)
+  end
+
+  def self.random(x, y)
+    Point.new(rand(x), rand(y))
   end
 
   def to_s

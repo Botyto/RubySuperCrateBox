@@ -35,6 +35,37 @@ class Sound
   end
 end
 
+class FontFactory
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+    @sizes = Hash.new
+    load
+  end
+
+  def filename
+    DATA + @name + EXT_FONT
+  end
+
+  def [](height)
+    load(height) if !@sizes.has_key? height
+    @sizes[height]
+  end
+
+  def load(height = 5)
+    @sizes[height] = Font.new(GameWindow.game, filename, height) if !@sizes.has_key? height
+  end
+
+  def draw(height, text, x, y, z, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
+    self[height].draw(text, x, y, z, factor_x, factor_y, color, mode)
+  end
+
+  def draw_rel(height, text, x, y, z, rel_x, rel_y, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
+    self[height].draw_rel(text, x, y, z, rel_x, rel_y, factor_x, factor_y, color, mode)
+  end
+end
+
 class Sprite
   attr_accessor :name, :image, :tiled, :z, :width, :height, :color, :ascii
 
@@ -87,7 +118,7 @@ end
 
 class ResourceManager
   class << self
-    attr_reader :sprites, :sounds, :scenes, :game
+    attr_reader :sprites, :sounds, :scenes, :fonts, :game
     
     def initialize(game)
       @game = game
@@ -97,19 +128,22 @@ class ResourceManager
       @scene_filenames  = ["level1"]
       @sprite_filenames = ["wall", "player", "fire", "enemy", "crate", "bullet", "back_level1"]
       @sound_filenames  = [] #["gameplay1", "shot"]
+      @font_filenames   = ["pixel"]
     end
 
     def load
       generate_filenames
     
-      @levels = Hash.new
+      @levels  = Hash.new
       @sprites = Hash.new
-      @sounds = Hash.new
-      @scenes = Hash.new
+      @sounds  = Hash.new
+      @scenes  = Hash.new
+      @fonts   = Hash.new
       
       @sprite_filenames.each { |file| load_sprite_file(file) }
       @sound_filenames.each  { |file| load_sound_file (file) }
       @scene_filenames.each  { |file| load_scene_file (file) }
+      @font_filenames.each   { |file| load_font_file  (file) }
     end
     
     def load_scene_file(filename)
@@ -142,6 +176,10 @@ class ResourceManager
       sound.load
       @sounds[filename] = sound
       debug_log "Load sound \"#{filename}\""
+    end
+
+    def load_font_file(filename)
+      @fonts[filename] = FontFactory.new filename
     end
   end
 end

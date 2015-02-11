@@ -155,15 +155,15 @@ class SceneManager
     end
 
     def start_scene(scene)
+      debug_log("Changing scene", MAGENTA)
       @current_scene.end if @current_scene
       clear
-      scene.start
       @current_scene = scene
-      debug_log("Changing scene", MAGENTA)
+      @current_scene.start
     end
 
     def solid_free?(aabb)
-      @current_scene.solid_free? aabb
+      @current_scene ? @current_scene.solid_free?(aabb) : true
     end
   end
 end

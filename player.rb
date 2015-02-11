@@ -18,6 +18,10 @@ class Player < GameObject
       @@weapons[name.to_s]
     end
 
+    def weapon_random(level = 9999)
+      @@weapons.keep_if { |name, wep| wep.level <= level }.to_a.sample[1]
+    end
+
     def parse_weapon(filename)
       full_filename = DATA_WEP + filename + EXT_WEAPON
       return if !File.exist? full_filename
@@ -35,11 +39,13 @@ class Player < GameObject
     @level = 5
 
     @shooting = false
-    @weapon = Player::weapon(:shotgun)
+    @weapon = Player::weapon(:pistol)
 
     @platformer = true
     @walk_speed = 2
     @jump_speed = 5
+
+    SceneManager.add_object Crate, Point.random(GameWindow.width, GameWindow.height)
   end
 
   def update
@@ -71,7 +77,9 @@ class Player < GameObject
   def collide(other)
     case other
     when Crate
-      other.destroy
+      other.replace!
+      @weapon = Player.weapon_random
+      FloatingText.create @position, @weapon.name, 10
     end
   end
 
@@ -94,7 +102,7 @@ class Player < GameObject
       if key == KbX and @weapon then
         @shooting = true
       elsif (key == KbUp or key == KbZ) then
-        @velocity.y = -@jump_speed if !SceneManager.solid_free? aabb + Point.unit_y
+        @velocity.y = -@jump_speed if !SceneManager::solid_free? aabb + Point.unit_y
       end
     end
   end
@@ -112,6 +120,62 @@ class Crate < GameObject
     super
     set_sprite "crate"
     @gravity = GRAVITY
-    @platformer = true
+    replace!
+  end
+
+  def replace!
+    @position = Point.random(GameWindow.width, GameWindow.height)
+    while !SceneManager::solid_free? aabb do
+      @position = Point.random(GameWindow.width, GameWindow.height)
+    end
+    @gravity = GRAVITY
+  end
+
+  def update
+    @velocity.y += @gravity
+
+    @velocity.y.abs.ceil.times do |i|
+      if SceneManager::solid_free? aabb + Point.unit_y then
+        @position.y += 1
+      else
+        @velocity.y = 0
+        @gravity = 0
+        break
+      end
+    end
+  end
+end
+
+class FloatingText < GameObject
+  attr_accessor :text, :size, :color, :has_shadow
+
+  def initialize
+    super
+    @gravity = -0.05
+    @text = "---"
+    @size = 5
+    @color = Color::WHITE
+    @has_shadow = true
+  end
+
+  def update
+    super
+    destroy if @position.y < 0
+  end
+
+  def draw
+    ResourceManager.fonts["pixel"].draw(@size, @text, @position.x, @position.y, 100, 1, 1, @color)
+    return if !@has_shadow
+    ResourceManager.fonts["pixel"].draw(@size, @text, @position.x + 2, @position.y + 2, 99, 1, 1, Color::BLACK)
+  end
+
+  def self.create(position, text = "---", height = 5)
+    obj = SceneManager.add_object FloatingText, position
+    obj.text = text
+    obj.size = height
+    obj
+  end
+
+  def method_missing(method, *arguments, &block)
   end
 end
