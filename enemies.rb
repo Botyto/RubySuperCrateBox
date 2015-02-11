@@ -20,6 +20,7 @@ class Enemy < GameObject
     @velocity.x = @walk_speed*[1, -1].sample
 
     @platformer = true
+    @tint_timer = 0
   end
 
   def update
@@ -31,6 +32,11 @@ class Enemy < GameObject
 
     @sprite_scale.x = @velocity.x.sign
     get_angry if @position.y > GameWindow.height
+
+    if @tint_timer > 0 then
+      @tint_timer -= 1
+      @tint = Color::WHITE if @tint_timer == 0
+    end
   end
 
   def collide(other)
@@ -38,6 +44,20 @@ class Enemy < GameObject
       when Player
         other.kill
     end
+  end
+
+  def damage(amount)
+    @health -= amount
+    @tint = Color::RED
+    @tint_timer = 4
+
+    kill if @health <= 0
+  end
+
+  def kill
+    @platformer = false
+    @velocity.x = 0
+    @gravity = GRAVITY
   end
 
   def get_angry

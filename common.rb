@@ -17,7 +17,7 @@ TYPE_MENU  = "menu"
 TYPE_SONG  = "song"
 TYPE_SFX   = "sfx"
 
-DEFAULT = 0
+DEFAULT = 00
 RED     = 31
 GREEN   = 32
 YELLOW  = 33
@@ -91,13 +91,27 @@ class Point
   end
 
   def length
-    Math.sqrt(@x*@x + @y*@y)
+    Math.sqrt length_squared
   end
 
   def length=(new_length)
     old_length = length
     @x *= new_length/old_length
     @y *= new_length/old_length
+  end
+
+  def distance_squared(point)
+    return 0 if !point.is_a? Point
+
+    dx = @x - point.x
+    dy = @y - point.y
+    dx*dx + dy*dy
+  end
+
+  def distance(point)
+    return 0 if !point.is_a? Point
+
+    Math.sqrt distance_squared point
   end
 
   def angle
@@ -194,6 +208,12 @@ class Rectangle
   def +(point)
     if point.is_a? Point then
       Rectangle.new(@x + point.x, @y + point.y, @w, @h)
+    end
+  end
+
+  def -(point)
+    if point.is_a? Point then
+      Rectangle.new(@x - point.x, @y - point.y, @w, @h)
     end
   end
 

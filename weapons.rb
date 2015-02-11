@@ -83,7 +83,7 @@ class Bullet < GameObject
   def collide(other)
     case other
     when Enemy
-      other.destroy
+      other.damage 2
     end
   end
 end

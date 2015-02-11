@@ -3,8 +3,7 @@ require_relative "sceneManager.rb"
 require_relative "common.rb"
 
 class GameObject
-  attr_accessor :velocity, :gravity, :angle, :frame, :solid,
-      :animation_speed
+  attr_accessor :velocity, :gravity, :angle, :frame, :solid, :animation_speed, :tint
   attr_reader :active, :sprite, :position_previous,  :position, :sprite_scale
 
   def initialize
@@ -17,6 +16,7 @@ class GameObject
     @angle = 0
     @frame = 0
     @animation_speed = 1
+    @tint = Color::WHITE
     set_sprite nil
     
     @platformer = false
@@ -34,20 +34,29 @@ class GameObject
     @velocity.y += @gravity
     @position_previous = @position
 
+    @velocity.y = 6*@velocity.y.sign if @velocity.y.abs > 6
+
     # platformer logic
     if @platformer then
-      @gravity = GRAVITY
+      @gravity = GRAVITY if SceneManager::solid_free? aabb + Point.unit_y
 
-      @velocity.y.ceil.times do |i|
-        if !SceneManager::solid_free? aabb + Point.unit_y then
+      # apply vertical movement
+      @velocity.y.abs.ceil.times do |i|
+        if !SceneManager::solid_free? aabb + Point.new(@velocity.y.sign, 0) then
+          # move outside solid
+          while !SceneManager::solid_free? aabb do
+            @position.y -= @velocity.y.sign
+          end
+
           @velocity.y = 0
           @gravity = 0
           break
         else
-          @position.y += 1
+          @position.y += @velocity.y.sign
         end
       end
 
+      # apply horizontal movement
       @velocity.x.abs.ceil.times do |i|
         @position.x += @velocity.x.sign if SceneManager::solid_free? aabb + Point.new(@velocity.x.sign, 0)
       end
@@ -92,7 +101,7 @@ class GameObject
   def draw
     # draw self, if a sprite is set
     if @sprite != nil then
-      sprite.draw_rot_frame(frame, @position.x, @position.y, @sprite.z, @angle, @sprite_scale.x, @sprite_scale.y)
+      sprite.draw_rot_frame(frame, @position.x, @position.y, @sprite.z, @angle, @sprite_scale.x, @sprite_scale.y, @tint)
     end
   end
 

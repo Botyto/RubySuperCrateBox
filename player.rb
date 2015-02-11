@@ -14,6 +14,10 @@ class Player < GameObject
       filenames.each { |file| parse_weapon file }
     end
 
+    def weapon(name)
+      @@weapons[name.to_s]
+    end
+
     def parse_weapon(filename)
       full_filename = DATA_WEP + filename + EXT_WEAPON
       return if !File.exist? full_filename
@@ -31,15 +35,25 @@ class Player < GameObject
     @level = 5
 
     @shooting = false
-    @weapon = @@weapons["shotgun"]
+    @weapon = Player::weapon(:shotgun)
 
     @platformer = true
     @walk_speed = 2
+    @jump_speed = 5
   end
 
   def update
-    @velocity.x = -@walk_speed if GameWindow.button_down?(KbLeft)
-    @velocity.x = @walk_speed if GameWindow.button_down?(KbRight)
+    @velocity.x = 0
+    if @alive then
+      @velocity.x = -@walk_speed if GameWindow.button_down?(KbLeft)
+      @velocity.x = @walk_speed if GameWindow.button_down?(KbRight)
+      @sprite_scale.x = @velocity.x.sign if @velocity.x != 0
+    end
+
+    if !SceneManager::solid_free?(aabb + Point.new(@velocity.x, 0)) then
+      @position.x -= @velocity.x.sign
+      @velocity.x = 0
+    end
 
     super
 
@@ -79,6 +93,8 @@ class Player < GameObject
     if @alive then
       if key == KbX and @weapon then
         @shooting = true
+      elsif (key == KbUp or key == KbZ) then
+        @velocity.y = -@jump_speed if !SceneManager.solid_free? aabb + Point.unit_y
       end
     end
   end
@@ -95,5 +111,7 @@ class Crate < GameObject
   def initialize
     super
     set_sprite "crate"
+    @gravity = GRAVITY
+    @platformer = true
   end
 end
