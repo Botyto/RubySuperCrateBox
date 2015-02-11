@@ -83,28 +83,20 @@ class Bullet < GameObject
   def collide(other)
     case other
     when Enemy
-      other.destory
+      other.destroy
     end
   end
 end
 
-class ShotgunBullet < GameObject
+class ShotgunBullet < Bullet
   def initialize
     super
-    set_sprite "bullet"
     @friction = 0.5
   end
 
   def update
     super
 
-    destroy if !inside_scene? or !SceneManager.solid_free? aabb or speed <= 0
-  end
-
-  def collide(other)
-    case other
-    when Enemy
-      other.destory
-    end
+    destroy if speed <= 0
   end
 end

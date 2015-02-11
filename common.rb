@@ -27,7 +27,7 @@ CYAN    = 36
 GRAY    = 37
 
 LOG = true
-GRAVITY = 0.1
+GRAVITY = 0.5
 
 class Point
   attr_accessor :x, :y
@@ -80,6 +80,16 @@ class Point
     self/length
   end
 
+  def normalize!
+    len = length
+    @x /= len
+    @y /= len
+  end
+
+  def length_squared
+    @x*@x + @y*@y
+  end
+
   def length
     Math.sqrt(@x*@x + @y*@y)
   end
@@ -94,13 +104,13 @@ class Point
     Math.atan2(@velocity.x, @velocity.y)
   end
 
-  def rotate(degrees)
+  def angle=(degrees)
     radians = deg_to_rad(degrees)
     @x = Math.cos(radians)*length
     @y = -Math.sin(radians)*length
   end
 
-  alias :angle= :rotate
+  alias :rotate :angle=
   
   def snap_to_grid(w, h)
     Point.new((@x/w).round*w, (@y/h).round*h)
@@ -122,6 +132,14 @@ class Point
 
   def self.unit_y
     Point.new(0, 1)
+  end
+
+  def self.one
+    Point.new(1, 1)
+  end
+
+  def self.zero
+    Point.new(0, 0)
   end
 
   def to_s
@@ -181,26 +199,6 @@ class Rectangle
 
   def to_s
     "{X: #{@x}; Y: #{@y}; W: #{@w}; H: #{@h}}"
-  end
-end
-
-class MovementWrapper
-  attr_accessor :movement_to_try, :furthest, :steps_count, :step, :parent
-
-  def initialize(position, destination, gameObject)
-    @movement_to_try = destination - position
-    @furthest = position
-    @steps_count = [@movement_to_try.length.floor, 1].max
-    @step = @movement_to_try/@steps_count
-    @parent = gameObject
-  end
-
-  def bounds(translate)
-    @parent.base_aabb + translate
-  end
-
-  def is_diagonal?
-    @movement_to_try.x != 0 && @movement_to_try.y != 0
   end
 end
 

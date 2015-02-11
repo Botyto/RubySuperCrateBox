@@ -5,11 +5,12 @@ require_relative "common.rb"
 class GameObject
   attr_accessor :velocity, :gravity, :angle, :frame, :solid,
       :animation_speed
-  attr_reader :active, :sprite, :position_previous, :position
+  attr_reader :active, :sprite, :position_previous,  :position, :sprite_scale
 
   def initialize
     @position_previous = @position = Point.new
     @velocity = Point.new
+    @sprite_scale = Point::one
     @gravity = 0
     @friction = 0
 
@@ -18,13 +19,12 @@ class GameObject
     @animation_speed = 1
     set_sprite nil
     
+    @platformer = false
+
     @active = true
   end
 
   def update
-    # update 
-    @frame += @animation_speed
-
     # update movement & position
     if speed > @friction then
       @velocity.length -= @friction
@@ -33,7 +33,30 @@ class GameObject
     end
     @velocity.y += @gravity
     @position_previous = @position
-    @position += @velocity
+
+    # platformer logic
+    if @platformer then
+      @gravity = GRAVITY
+
+      @velocity.y.ceil.times do |i|
+        if !SceneManager::solid_free? aabb + Point.unit_y then
+          @velocity.y = 0
+          @gravity = 0
+          break
+        else
+          @position.y += 1
+        end
+      end
+
+      @velocity.x.abs.ceil.times do |i|
+        @position.x += @velocity.x.sign if SceneManager::solid_free? aabb + Point.new(@velocity.x.sign, 0)
+      end
+    else
+      @position += @velocity
+    end
+
+    # update sprite
+    @frame += @animation_speed
 
     # handle collisions with other objects
     handle_collisions
@@ -69,7 +92,7 @@ class GameObject
   def draw
     # draw self, if a sprite is set
     if @sprite != nil then
-      sprite.draw_rot_frame(frame, @position.x, @position.y, @sprite.z, @angle)
+      sprite.draw_rot_frame(frame, @position.x, @position.y, @sprite.z, @angle, @sprite_scale.x, @sprite_scale.y)
     end
   end
 
@@ -125,38 +148,5 @@ class GameObject
 
   def inside_scene?
     SceneManager.point_inside? position
-  end
-
-  def move_collide_solid(position, destination)
-    position == (position = try_collide_diagonal(position, destination))
-  end
-
-  def try_collide_diagonal(position, destination)
-    movement = MovementWrapper.new(position, destination, self)
-
-    movement.steps_count.times do |i|
-      position_to_try = position + movement.step*i
-
-      if SceneManager.solid_free? movement.bounds(position_to_try) then
-        movement.furthest = try_collide_non_diagonal(movement, i)
-        break
-      end
-
-      movement.furthest = position_to_try
-    end
-
-    return movement.furthest
-  end
-
-  def try_collide_non_diagonal(movement, i)
-    return movement.furthest if !movement.is_diagonal?
-
-    steps_left = movement.steps_count - (i - 1)
-    remaining_move = movement.step * steps_left
-
-    movement.furthest = try_collide_diagonal(movement.furthest, movement.furthest + remaining_move*Point::unit_x)
-    movement.furthest = try_collide_diagonal(movement.furthest, movement.furthest + remaining_move*Point::unit_y)
-
-    return movement.furthest
   end
 end

@@ -24,29 +24,22 @@ class Player < GameObject
   def initialize
     super
     set_sprite "player"
+    @gravity = GRAVITY
     @animation_speed = 0.2
+
     @alive = true
     @level = 5
+
     @shooting = false
     @weapon = @@weapons["shotgun"]
-    @gravity = GRAVITY
+
+    @platformer = true
+    @walk_speed = 2
   end
 
   def update
-    if !SceneManager::solid_free? aabb then
-      if move_collide_solid(@position_previous, @position) then
-        @gravity = 0
-        @velocity.y = 0
-        @position.y = @position.y.ceil
-        while !SceneManager::solid_free? aabb do
-          @position.y -= 1
-        end
-      else
-        @gravity = GRAVITY
-      end
-    else
-      @gravity = GRAVITY
-    end
+    @velocity.x = -@walk_speed if GameWindow.button_down?(KbLeft)
+    @velocity.x = @walk_speed if GameWindow.button_down?(KbRight)
 
     super
 
@@ -57,19 +50,23 @@ class Player < GameObject
       @angle += 10
       destroy if @position.y > GameWindow.height
     end
+
+    kill if @position.y > GameWindow.height
   end
 
   def collide(other)
     case other
     when Crate
       other.destroy
-      
     end
   end
 
   def kill
+    return if !@alive
+
     @alive = false
     @gravity = GRAVITY
+    @platformer = false
 
     set_sprite "player"
     @animation_speed = 0
@@ -78,8 +75,11 @@ class Player < GameObject
   end
 
   def button_pressed(key)
-    if key == KbX and @weapon then
-      @shooting = true
+    # alive actions
+    if @alive then
+      if key == KbX and @weapon then
+        @shooting = true
+      end
     end
   end
 

@@ -56,6 +56,14 @@ class GameWindow < Window
     def width
       @@game.width
     end
+
+    def method_missing(method, *arguments, &block)
+      if @@game.respond_to? method then
+        return @@game.send method, *arguments, &block
+      else
+        debug_log "Call to a missing method '#{method}' in GameWindows", RED
+      end
+    end
   end
 
   def initialize

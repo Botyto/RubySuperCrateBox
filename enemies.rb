@@ -4,55 +4,49 @@ require_relative "player.rb"
 require_relative "common.rb"
 
 class Enemy < GameObject
+  attr_reader :angry
+
   def initialize
     super
     set_sprite "enemy"
-    @velocity.y = 1
-    @velocity.x = [1, -1].sample
     @gravity = GRAVITY
     @animation_speed = 0.25
+
+    @walk_speed = 1
     @health = 4
+    @angry = false
+
+    @velocity.y = 1
+    @velocity.x = @walk_speed*[1, -1].sample
+
+    @platformer = true
   end
 
   def update
-    if !SceneManager::solid_free? aabb then
-      if move_collide_solid(@position_previous, @position) then
-        @gravity = 0
-        @velocity.y = 0
-        while !SceneManager::solid_free? aabb do
-          @position.y -= 1
-        end
-      else
-        @gravity = GRAVITY
-      end
-    else
-      @gravity = GRAVITY
-    end
+    super
 
-    if !SceneManager::solid_free?(aabb + Point.new(@velocity.x.sign*2, 0)) then
+    if !SceneManager::solid_free?(aabb + Point.new(@velocity.x, 0)) then
       @velocity.x *= -1
     end
 
-    super
-
-    destroy if @position.y > GameWindow.height
+    @sprite_scale.x = @velocity.x.sign
+    get_angry if @position.y > GameWindow.height
   end
 
   def collide(other)
     case other
       when Player
-        other.kill if other.alive
+        other.kill
     end
   end
 
-  def draw
-    if @sprite != nil then
-      sprite.draw_rot_frame(frame, @position.x, @position.y, @sprite.z, @angle, @velocity.x.sign)
-    end
-  end
+  def get_angry
+    return if @angry
 
-  def destroy
-    super
+    @angry = true
+    @walk_speed = 2
+    @velocity.x = @walk_speed*@velocity.x.sign
+    @position.y = 0
   end
 end
 
