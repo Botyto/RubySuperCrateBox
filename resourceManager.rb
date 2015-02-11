@@ -53,8 +53,10 @@ class FontFactory
     @sizes[height]
   end
 
-  def load(height = 5)
-    @sizes[height] = Font.new(GameWindow.game, filename, height) if !@sizes.has_key? height
+  def load(height = 10)
+    return if @sizes.has_key? height
+    debug_log "Load font \"#{name}\" at size #{height}", YELLOW
+    @sizes[height] = Font.new(GameWindow.game, filename, height)
   end
 
   def draw(height, text, x, y, z, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
@@ -126,7 +128,7 @@ class ResourceManager
 
     def generate_filenames
       @scene_filenames  = ["level1"]
-      @sprite_filenames = ["wall", "player", "fire", "enemy", "crate", "bullet", "back_level1"]
+      @sprite_filenames = ["wall", "player", "fire", "enemy", "enemy_angry", "crate", "bullet", "back_level1"]
       @sound_filenames  = [] #["gameplay1", "shot"]
       @font_filenames   = ["pixel"]
     end

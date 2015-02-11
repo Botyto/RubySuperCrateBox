@@ -1,0 +1,7 @@
+name:enemy_angry.bmp
+tiled:true:bool
+width:10:int
+height:11:int
+z:200:int
+color:31:int
+ascii::string

@@ -67,6 +67,7 @@ class Enemy < GameObject
     @walk_speed = 2
     @velocity.x = @walk_speed*@velocity.x.sign
     @position.y = 0
+    set_sprite "enemy_angry"
   end
 end
 
