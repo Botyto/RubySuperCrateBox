@@ -110,6 +110,8 @@ class GameWindow < Window
       SceneManager.draw
     end
 
+    ResourceManager.fonts["pixel"].draw(10, Player.crates_collected, width/2, 10, 0, 0)
+
     #GameWindow.flush
   end
   

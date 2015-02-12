@@ -1,0 +1,7 @@
+name:flyer.bmp
+tiled:true:bool
+width:8:int
+height:7:int
+z:200:int
+color:32:int
+ascii::string

@@ -8,6 +8,10 @@ class Player < GameObject
   attr_reader :alive, :weapon, :level, :shooting
 
   class << self
+    def initialize
+      @@crates_collected = 0
+    end
+
     def initialize_weapons
       @@weapons = Hash.new
       filenames = Weapon.all_weapons
@@ -27,10 +31,22 @@ class Player < GameObject
       return if !File.exist? full_filename
       @@weapons[filename] = parse_class(full_filename, Weapon)
     end
+
+    def player
+      @@player
+    end
+
+    def crates_collected
+      @@crates_collected
+    end
   end
 
   def initialize
     super
+
+    @@player = self
+    @@crates_collected = 0
+
     set_sprite "player"
     @gravity = GRAVITY
     @animation_speed = 0.2
@@ -79,6 +95,7 @@ class Player < GameObject
     when Crate
       other.replace!
       @weapon = Player.weapon_random
+      @@crates_collected += 1
       FloatingText.create @position, @weapon.name, 10
     end
   end

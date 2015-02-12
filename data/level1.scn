@@ -2,4 +2,4 @@ type:level
 file:1.lvl
 background:back_level1
 music:gameplay1
-spawn_interval:60:int
+spawn_interval:120:int

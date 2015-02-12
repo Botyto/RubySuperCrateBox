@@ -1,0 +1,7 @@
+name:back_level2.bmp
+tiled:false:bool
+width:260:int
+height:180:int
+z:1:int
+color:0:int
+ascii::string

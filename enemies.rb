@@ -71,6 +71,34 @@ class Enemy < GameObject
   end
 end
 
+class Flyer < Enemy
+  def initialize
+    super
+    set_sprite "flyer"
+    @platformer = false
+    @gravity = 0.01
+    @velocity.x = [1, -1].sample
+  end
+
+  def update
+    if @health > 0 then
+      @velocity.y += 0.1 if @position.y < 20
+      @velocity.y += 0.01
+      @velocity.x += @velocity.x.sign*0.1 if @velocity.x.abs < 0.4
+
+      if SceneManager.solid_free? aabb then
+        @velocity.x = -@velocity.x if !SceneManager.solid_free? aabb + Point.new(@velocity.x, 0)
+        @velocity.y = -@velocity.y if !SceneManager.solid_free? aabb + Point.new(0, @velocity.y)
+      end
+
+      @velocity.length = 0.5 if self.speed > 0.5
+      @sprite_scale.x = (Player.player.position.x - @position.x).sign
+    end
+
+    super
+  end
+end
+
 class Spawner < GameObject
   def spawn_interval
     if SceneManager.current_scene then
@@ -91,7 +119,7 @@ class Spawner < GameObject
     @timer -= 1
     if @timer <= 0 then
       @timer = spawn_interval
-      SceneManager.add_object Enemy, @position
+      SceneManager.add_object [Enemy, Flyer].sample, @position
     end
   end
 end

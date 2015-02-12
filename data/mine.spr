@@ -2,6 +2,6 @@ name:mine.bmp
 tiled:false:bool
 width:8:int
 height:5:int
-z:400:int
+z:460:int
 color:0:int
 ascii::string
