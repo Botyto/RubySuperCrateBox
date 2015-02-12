@@ -76,7 +76,6 @@ class Bullet < GameObject
 
   def update
     super
-
     destroy if !inside_scene? or !SceneManager.solid_free? aabb
   end
 
@@ -110,8 +109,7 @@ class Rocket < GameObject
 
   def update
     super
-
-    self.speed += 0.2 if self.speed < 10
+    @velocity.x += 0.2*@velocity.x.sign if @velocity.x.abs < 10
   end
 
   def collide(other)
@@ -144,5 +142,25 @@ class Explosion < GameObject
   def collide(other)
     return if !other.is_a? Enemy
     other.damage 8
+  end
+end
+
+class Mine < GameObject
+  def initialize
+    super
+    set_sprite "mine"
+    @platformer = true
+  end
+
+  def collide(other)
+    case other
+    when Enemy
+      destroy
+    end
+  end
+
+  def destroy
+    super
+    SceneManager.add_object Explosion, @position
   end
 end
