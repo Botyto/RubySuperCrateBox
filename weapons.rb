@@ -108,6 +108,7 @@ class Explosion < GameObject
     @animation_speed = 0.1
     @sprite_scale = Point.new(0.5, 0.5)
     GameWindow.game.shake 5
+    ResourceManager.sounds["explosion"].play if ResourceManager.sounds["explosion"]
   end
 
   def update
