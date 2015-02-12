@@ -39,7 +39,7 @@ class Player < GameObject
     @level = 5
 
     @shooting = false
-    @weapon = Player::weapon(:mines)
+    @weapon = Player::weapon(:bazooka)
 
     @platformer = true
     @walk_speed = 2

@@ -61,7 +61,7 @@ class GameWindow < Window
       if @@game.respond_to? method then
         return @@game.send method, *arguments, &block
       else
-        debug_log "Call to a missing method '#{method}' in GameWindows", RED
+        debug_log "Call to a missing method '#{method}' in GameWindow", RED
       end
     end
   end
@@ -76,7 +76,7 @@ class GameWindow < Window
     ResourceManager.load
     Player.initialize_weapons
     SceneManager.initialize
-    SceneManager.start_scene(ResourceManager.scenes["level1"])
+    SceneManager.start_scene(ResourceManager.scenes.values.sample)
     
     @shake = 0
     @camera = Point.new(GRID_WIDTH, GRID_HEIGHT)
