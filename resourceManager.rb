@@ -60,12 +60,12 @@ class FontFactory
   end
 
   def draw(height, text, x, y, z, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
-    self[height].draw(text, x + 2, y + 2, z, factor_x, factor_y, Color::BLACK, mode)
+    self[height].draw(text, x + 1, y + 1, z, factor_x, factor_y, Color::BLACK, mode)
     self[height].draw(text, x, y, z, factor_x, factor_y, color, mode)
   end
 
   def draw_rel(height, text, x, y, z, rel_x, rel_y, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
-    self[height].draw_rel(text, x + 2, y + 2, z, rel_x, rel_y, factor_x, factor_y, Color::BLACK, mode)
+    self[height].draw_rel(text, x + 1, y + 1, z, rel_x, rel_y, factor_x, factor_y, Color::BLACK, mode)
     self[height].draw_rel(text, x, y, z, rel_x, rel_y, factor_x, factor_y, color, mode)
   end
 end
@@ -133,7 +133,7 @@ class ResourceManager
       @scene_filenames  = ["level1", "level2", "level3"]
       @sprite_filenames = ["wall", "player", "fire", "enemy", "enemy_angry", "explosion", "crate",
         "bullet", "back_level1", "back_level2", "back_level3", "mine", "flyer"]
-      @sound_filenames  = ["gameplay1", "gameplay2", "gameplay3", "shot", "explosion"]
+      @sound_filenames  = ["gameplay1", "gameplay2", "gameplay3", "shot", "explosion", "get_angry"]
       @font_filenames   = ["pixel"]
     end
 

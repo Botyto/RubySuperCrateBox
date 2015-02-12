@@ -117,7 +117,7 @@ class GameWindow < Window
     end
 
     if @score == -1 then
-      ResourceManager.fonts["pixel"].draw(10, Player.crates_collected, width/2, 10, 999)
+      ResourceManager.fonts["pixel"].draw_rel(10, Player.crates_collected, width/2, 10, 999, 0.5, 0)
     else
       ResourceManager.fonts["pixel"].draw_rel(10, "New highscore!!!", width/2, 50, 999, 0.5, 0.5) if @score > @highscore
       ResourceManager.fonts["pixel"].draw_rel(10, "Your score is: " + @score.to_s, width/2, height/2, 999, 0.5, 0.5)

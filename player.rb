@@ -140,13 +140,12 @@ class Crate < GameObject
   def initialize
     super
     set_sprite "crate"
-    @gravity = GRAVITY
     replace!
   end
 
   def replace!
     @position = Point.random(GameWindow.width, GameWindow.height)
-    while !SceneManager::solid_free? aabb do
+    until SceneManager::solid_free? aabb do
       @position = Point.random(GameWindow.width, GameWindow.height)
     end
     @gravity = GRAVITY

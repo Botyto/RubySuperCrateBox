@@ -42,7 +42,9 @@ class Weapon
       end
     end
 
-    shooter.position += Point.new(-direction*@push, 0)
+    if SceneManager.solid_free? shooter.aabb + Point.new(-direction*@push, 0)
+      shooter.position += Point.new(-direction*@push, 0)
+    end
   end
 
   def is_allowed?(level)

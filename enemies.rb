@@ -31,7 +31,7 @@ class Enemy < GameObject
     end
 
     @sprite_scale.x = @velocity.x.sign
-    get_angry if @position.y > GameWindow.height
+    get_angry if @position.y > GameWindow.height and @health > 0
 
     if @tint_timer > 0 then
       @tint_timer -= 1
@@ -61,13 +61,18 @@ class Enemy < GameObject
   end
 
   def get_angry
-    return if @angry
+    return if @angry and @health <= 0
 
     @angry = true
+
     @walk_speed = 2
     @velocity.x = @walk_speed*@velocity.x.sign
-    @position.y = 0
+
+    @position.y = 10
+    @position.x = GameWindow.width/2 + 10 if !SceneManager.solid_free? aabb
+
     set_sprite "enemy_angry"
+    ResourceManager.sounds["get_angry"].play
   end
 end
 
