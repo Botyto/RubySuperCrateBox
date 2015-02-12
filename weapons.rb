@@ -101,29 +101,6 @@ class ShotgunBullet < Bullet
   end
 end
 
-class Rocket < GameObject
-  def initialize
-    super
-    set_sprite "rocket"
-  end
-
-  def update
-    super
-    @velocity.x += 0.2*@velocity.x.sign if @velocity.x.abs < 10
-  end
-
-  def collide(other)
-    return if !other.is_a? Enemy
-    other.damage 2
-    destroy
-  end
-
-  def destroy
-    super
-    SceneManager.add_object Explosion, @position
-  end
-end
-
 class Explosion < GameObject
   def initialize
     super
