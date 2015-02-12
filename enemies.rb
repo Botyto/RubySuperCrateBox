@@ -97,6 +97,11 @@ class Flyer < Enemy
 
     super
   end
+
+  def get_angry
+    super
+    set_sprite "flyer_angry"
+  end
 end
 
 class Spawner < GameObject

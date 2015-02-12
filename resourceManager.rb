@@ -60,10 +60,12 @@ class FontFactory
   end
 
   def draw(height, text, x, y, z, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
+    self[height].draw(text, x + 2, y + 2, z, factor_x, factor_y, Color::BLACK, mode)
     self[height].draw(text, x, y, z, factor_x, factor_y, color, mode)
   end
 
   def draw_rel(height, text, x, y, z, rel_x, rel_y, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
+    self[height].draw_rel(text, x + 2, y + 2, z, rel_x, rel_y, factor_x, factor_y, Color::BLACK, mode)
     self[height].draw_rel(text, x, y, z, rel_x, rel_y, factor_x, factor_y, color, mode)
   end
 end

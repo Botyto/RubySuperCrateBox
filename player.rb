@@ -130,6 +130,10 @@ class Player < GameObject
       @weapon.shoot_released if @weapon
     end
   end
+
+  def destroy
+    GameWindow.end_game @@crates_collected
+  end
 end
 
 class Crate < GameObject

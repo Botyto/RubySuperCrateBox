@@ -5,6 +5,7 @@ require_relative "sceneManager.rb"
 require_relative "resourceManager.rb"
 require_relative "common.rb"
 require_relative "player.rb"
+require_relative "enemies.rb"
 
 include Gosu
 
@@ -12,6 +13,8 @@ WIDTH = 26
 HEIGHT = 18
 
 class GameWindow < Window
+  attr_reader :highscore
+
   class << self
     def game
       @@game
@@ -71,15 +74,18 @@ class GameWindow < Window
     @caption = "Ruby Super Crate Box"
     @@bounds = Rectangle.new(GRID_WIDTH, GRID_HEIGHT, (WIDTH-2)*GRID_WIDTH, (HEIGHT-2)*GRID_HEIGHT)
     @@game = self
+
+    @shake = 0
+    @camera = Point.new(GRID_WIDTH, GRID_HEIGHT)
+    @highscore = 0
+    @score = -1
     
     ResourceManager.initialize self
     ResourceManager.load
     Player.initialize_weapons
     SceneManager.initialize
     SceneManager.start_scene(ResourceManager.scenes.values.sample)
-    
-    @shake = 0
-    @camera = Point.new(GRID_WIDTH, GRID_HEIGHT)
+    highscore_load
   end
 
   def update
@@ -110,8 +116,13 @@ class GameWindow < Window
       SceneManager.draw
     end
 
-    ResourceManager.fonts["pixel"].draw(10, Player.crates_collected, width/2+2, 12, 999, 1, 1, Color::BLACK)
-    ResourceManager.fonts["pixel"].draw(10, Player.crates_collected, width/2, 10, 999, 1, 1, Color::WHITE)
+    if @score == -1 then
+      ResourceManager.fonts["pixel"].draw(10, Player.crates_collected, width/2, 10, 999)
+    else
+      ResourceManager.fonts["pixel"].draw_rel(10, "New highscore!!!", width/2, 50, 999, 0.5, 0.5) if @score > @highscore
+      ResourceManager.fonts["pixel"].draw_rel(10, "Your score is: " + @score.to_s, width/2, height/2, 999, 0.5, 0.5)
+      ResourceManager.fonts["pixel"].draw_rel(10, "Highscore: " + @highscore.to_s, width/2, height/2 + 13, 999, 0.5, 0.5)
+    end
 
     #GameWindow.flush
   end
@@ -123,6 +134,25 @@ class GameWindow < Window
   
   def button_up(button)
     SceneManager.button_released button
+  end
+
+  def end_game(score)
+    @score = score
+    highscore_save
+    SceneManager.objects.keep_if { |obj| obj.is_a? Spawner }.each { |obj| obj.destroy }
+  end
+
+  def highscore_load
+    return unless File.exists? "game"
+    file_handle = File.open("game", "r")
+    @highscore = file_handle.read.to_i
+    file_handle.close
+  end
+
+  def highscore_save
+    file_handle = File.open("game", "w")
+    file_handle.puts [@highscore, @score].max
+    file_handle.close
   end
 
   def needs_cursor?
