@@ -1,0 +1,7 @@
+name:player_walk.bmp
+tiled:true:bool
+width:10:int
+height:11:int
+z:450:int
+color:33:int
+ascii::string

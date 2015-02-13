@@ -1,0 +1,7 @@
+name:smoke.bmp
+tiled:false:bool
+width:10:int
+height:10:int
+z:200:int
+color:31:int
+ascii::string

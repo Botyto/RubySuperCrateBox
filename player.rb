@@ -60,6 +60,8 @@ class Player < GameObject
     @platformer = true
     @walk_speed = 2
     @jump_speed = 5
+
+    SmokePuff.create_puffs @position
   end
 
   def update
@@ -74,7 +76,7 @@ class Player < GameObject
       else
         set_sprite "player"
       end
-      
+
       @sprite_scale.x = @velocity.x.sign if @velocity.x != 0
     end
 
@@ -105,6 +107,7 @@ class Player < GameObject
       @@crates_collected += 1
       FloatingText.create @position, @weapon.name, 10
       ResourceManager.sounds["crate_collected"].play
+      SmokePuff.create_puffs @position
     end
   end
 
@@ -169,6 +172,7 @@ class Crate < GameObject
       @position = Point.random(GameWindow.width, GameWindow.height)
     end
     @gravity = GRAVITY
+    SmokePuff.create_puffs @position
   end
 
   def update
@@ -185,6 +189,33 @@ class Crate < GameObject
         @gravity = 0
         break
       end
+    end
+  end
+end
+
+class SmokePuff < GameObject
+  def initialize
+    super
+    set_sprite "smoke"
+    @friction = 0.1
+    @velocity = Point.random(-1..1, -1..1)
+    @angular_velocity = rand(-5..5)
+    @sprite_scale = Point.one
+  end
+
+  def update
+    super
+    @sprite_scale -= 0.01
+    @sprite_scale -= 0.1 if speed == 0
+    @angle += @angular_velocity
+
+    destroy if @sprite_scale.x <= 0
+  end
+
+  def self.create_puffs(position, count = 5)
+    count.times do
+      obj = SceneManager.add_object SmokePuff
+      obj.position = position
     end
   end
 end
