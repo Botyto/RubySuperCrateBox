@@ -57,6 +57,7 @@ class Scene
 
     if @type == TYPE_LEVEL && @level then
       @level.start
+      SceneManager.add_object Crate
     elsif @type == TYPE_MENU && @menu_items then
       debug_log "Start menu scene NOT IMPLEMENTED"
     end
@@ -110,16 +111,9 @@ class SceneManager
       @background_color = Color.new(255, 180, 212, 238)
     end
 
-    def add_object(object)
-      obj = object.is_a? Class ? object.new : object
-      @objects.push obj
-      debug_log("Add \"#{object.class}\"", CYAN)
-      obj
-    end
-
-    def add_object(klass, position)
-      object = klass.new
-      object.position = position
+    def add_object(klass, position = nil)
+      object = klass.is_a?(Class) ? klass.new : klass
+      object.position = position if position
       @objects.push object
       debug_log("Add \"#{object.class}\"", CYAN)
       object

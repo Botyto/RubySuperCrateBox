@@ -1,7 +1,7 @@
 name:crate.bmp
 tiled:false:bool
-width:10:int
-height:10:int
+width:8:int
+height:8:int
 z:150:int
 color:33:int
 ascii::string

@@ -60,8 +60,6 @@ class Player < GameObject
     @platformer = true
     @walk_speed = 2
     @jump_speed = 5
-
-    SceneManager.add_object Crate, Point.random(GameWindow.width, GameWindow.height)
   end
 
   def update
@@ -144,17 +142,20 @@ class Crate < GameObject
   end
 
   def replace!
-    @position = Point.random(GameWindow.width, GameWindow.height)
-    until SceneManager::solid_free? aabb do
+    @position = Point::random(GameWindow.width, GameWindow.height)
+    while !SceneManager::solid_free? aabb do
       @position = Point.random(GameWindow.width, GameWindow.height)
     end
     @gravity = GRAVITY
   end
 
   def update
+    return if @gravity <= 0
+    replace! if @position.y > GameWindow.height
+
     @velocity.y += @gravity
 
-    @velocity.y.abs.ceil.times do |i|
+    @velocity.y.ceil.times do |i|
       if SceneManager::solid_free? aabb + Point.unit_y then
         @position.y += 1
       else

@@ -92,8 +92,8 @@ class Flyer < Enemy
       @velocity.x += @velocity.x.sign*0.1 if @velocity.x.abs < 0.4
 
       if SceneManager.solid_free? aabb then
-        @velocity.x = -@velocity.x if !SceneManager.solid_free? aabb + Point.new(@velocity.x, 0)
-        @velocity.y = -@velocity.y if !SceneManager.solid_free? aabb + Point.new(0, @velocity.y)
+        @velocity.x *= -1 if !SceneManager.solid_free? aabb + Point.new(@velocity.x, 0)
+        @velocity.y *= -1 if !SceneManager.solid_free? aabb + Point.new(0, @velocity.y)
       end
 
       @velocity.length = 0.5 if self.speed > 0.5

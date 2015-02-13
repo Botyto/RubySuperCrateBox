@@ -6,7 +6,7 @@ level:0:int
 can_hold:true:bool
 interval:5:int
 shots:1:int
-push:0:int
+push:1:int
 shake:1.2:int
 spread:5:int
 shot_speed:5:int
