@@ -69,14 +69,6 @@ class Point
     end
   end
   
-  def self.zero
-    Point.new
-  end
-
-  def self.one
-    Point.new(1, 1)
-  end
-
   def normalize
     self/length
   end

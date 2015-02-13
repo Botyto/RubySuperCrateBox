@@ -20,24 +20,17 @@ class TestPoint < Test
   end
 
   def assert_point(x, y, point, message = nil, delta = 0.001)
-    assert_kind_of(Numeric, x, "Provided X isn't Numeric")
-    assert_kind_of(Numeric, y, "Provided Y isn't Numeric")
-    assert_kind_of(Point, point, "Provided point isn't a Point")
+    raise ArgumentError, "Provided X isn't Numeric" unless x.is_a? Numeric
+    raise ArgumentError, "Provided Y isn't Numeric" unless y.is_a? Numeric
+    raise ArgumentError, "Provided point isn't Point" unless point.is_a? Point
 
     assert_in_delta(x, point.x, delta, "#{message} (X is different)")
     assert_in_delta(y, point.y, delta, "#{message} (Y is different)")
   end
 
-  def assert_point_length(length, point, message = nil, delta = 0.001)
-    assert_kind_of(Numeric, length, "Provided length isn't Numeric")
-    assert_kind_of(Point, point, "Provided point isn't a Point")
-
-    assert_in_delta(length*length, point.length_squared, delta, message)
-  end
-
   def assert_point_angle(angle, point, message = nil, delta = 0.001)
-    assert_kind_of(Numeric, angle, "Provided angle isn't Numeric")
-    assert_kind_of(Point, point, "Provided point isn't a Point")
+    raise ArgumentError, "Provided angle isn't Numeric" unless angle.is_a? Numeric
+    raise ArgumentError, "Provided point isn't Point" unless point.is_a? Point
 
     assert_in_delta(angle, rad_to_deg(point.angle), delta, message)
   end
@@ -70,22 +63,22 @@ class TestPoint < Test
     half_sqrt2 = 1/Math.sqrt(2)
 
     assert_point(half_sqrt2, half_sqrt2, @one.normalize)
-    assert_point_length(1, @one.normalize)
+    assert_in_delta(1, @one.normalize.length)
 
     assert_point(1, 0, @unit_x.normalize)
-    assert_point_length(1, @unit_x.normalize)
+    assert_in_delta(1, @unit_x.normalize.length)
 
     @pythagoras.normalize!
 
-    assert_point_length(1, @pythagoras)
+    assert_in_delta(1, @pythagoras.length)
   end
 
   def test_point_length_angle_and_distances
     sqrt2 = Math.sqrt(2)
     pythagoras_angle = rad_to_deg(Math.atan2(4, 3))
 
-    assert_point_length(sqrt2, @one)
-    assert_point_length(5, @pythagoras)
+    assert_in_delta(sqrt2, @one.length)
+    assert_in_delta(5, @pythagoras.length)
 
     assert_point_angle(00, @unit_x)
     assert_point_angle(45, @one)
@@ -97,5 +90,63 @@ class TestPoint < Test
     assert_point(6, 4, @point3.snap_to_grid(1, 1))
     @point3.snap_to_grid!(1, 1)
     assert_point(6, 4, @point3)
+  end
+end
+
+class TestRectangle < Test
+  def assert_rectangle(x, y, w, h, rectangle, message = nil, delta = 0.001)
+    raise ArgumentError, "Provided X isn't Numeric" unless x.is_a? Numeric
+    raise ArgumentError, "Provided Y isn't Numeric" unless y.is_a? Numeric
+    raise ArgumentError, "Provided W isn't Numeric" unless w.is_a? Numeric
+    raise ArgumentError, "Provided H isn't Numeric" unless h.is_a? Numeric
+    raise ArgumentError, "Provided rectangle isn't Rectangle" unless rectangle.is_a? Rectangle
+
+    assert_in_delta(x, rectangle.x, delta, "#{message} (X is different)")
+    assert_in_delta(y, rectangle.y, delta, "#{message} (Y is different)")
+    assert_in_delta(w, rectangle.w, delta, "#{message} (W is different)")
+    assert_in_delta(h, rectangle.h, delta, "#{message} (H is different)")
+  end
+
+  def test_rectangle_generation
+    assert_rectangle(0, 0, 0, 0, Rectangle.new)
+    assert_rectangle(1, 2, 3, 4, Rectangle.new(1, 2, 3, 4))
+  end
+
+  def test_rectangle_intersection
+    rect1 = Rectangle.new(0, 0, 1, 1)
+    rect2 = Rectangle.new(0.25, 0.25, 0.5, 0.5)
+    rect3 = Rectangle.new(2, 2, 1, 1)
+    rect4 = Rectangle.new(2, 1, 1, 1)
+
+    assert(rect1.intersects? rect2)
+    assert(rect3.intersects? rect4)
+    refute(rect1.intersects? rect3)
+  end
+
+  def test_rectangle_point_inside
+    rect = Rectangle.new(0, 0, 1, 1)
+    point1 = Point.new(0, 0)
+    point2 = Point.new(0.5, 0.5)
+    point3 = Point.new(3, 3)
+
+    assert(rect.point_inside? point1)
+    assert(rect.point_inside? point2)
+    refute(rect.point_inside? point3)
+  end
+
+  def test_rectangle_arithmetics
+    rect = Rectangle.new(1, 1, 1, 1)
+    point = Point.new(2, 2)
+
+    assert_rectangle( 3,  3, 1, 1, rect + point)
+    assert_rectangle(-1, -1, 1, 1, rect - point)
+  end
+
+  def test_rectangle_others
+    rect = Rectangle.new(1, 1, 1, 1)
+
+    assert_in_delta(2, rect.x2)
+    assert_in_delta(2, rect.y2)
+    assert_in_delta(1, rect.area)
   end
 end
