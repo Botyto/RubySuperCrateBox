@@ -14,6 +14,7 @@ class Enemy < GameObject
 
     @walk_speed = 1
     @health = 4
+    @alive = true
     @angry = false
 
     @velocity.y = 1
@@ -28,12 +29,17 @@ class Enemy < GameObject
   def update
     super
 
-    if !SceneManager::solid_free?(aabb + Point.new(@velocity.x, 0)) then
-      @velocity.x *= -1
-    end
+    if @alive then
+      if !SceneManager::solid_free?(aabb + Point.new(@velocity.x, 0)) then
+        @velocity.x *= -1
+      end
 
-    @sprite_scale.x = @velocity.x.sign
-    get_angry if @position.y > GameWindow.height and @health > 0
+      @sprite_scale.x = @velocity.x.sign
+      get_angry if @position.y > GameWindow.height and @alive
+    else
+      @angle += 3
+      destroy if @position.y > GameWindow.height
+    end
 
     if @tint_timer > 0 then
       @tint_timer -= 1
@@ -44,11 +50,12 @@ class Enemy < GameObject
   def collide(other)
     case other
       when Player
-        other.kill if @health > 0
+        other.kill if @alive
     end
   end
 
   def damage(amount)
+    return unless @alive
     @health -= amount
     @tint = Color::RED
     @tint_timer = 4
@@ -57,14 +64,17 @@ class Enemy < GameObject
   end
 
   def kill
+    return unless @alive
+    @alive = false
     @platformer = false
-    @velocity.x = 0
+    @velocity.x = rand(-1..1)
+    @velocity.y = -2
     @gravity = GRAVITY
     @sound_die.play
   end
 
   def get_angry
-    return if @angry and @health <= 0
+    return if @angry or !@alive
 
     @angry = true
 
