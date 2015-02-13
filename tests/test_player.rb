@@ -136,7 +136,7 @@ class TestPlayer < Test
     crate.position = Point.new
 
     assert_equal(0, Player.crates_collected)
-    player.collide crate if player.aabb.intersects? crate.aab
+    player.collide crate if player.aabb.intersects? crate.aabb
     assert_equal(1, Player.crates_collected)
   end
 end
