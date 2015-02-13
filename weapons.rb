@@ -18,7 +18,7 @@ class Weapon
   def draw(position, scale_x = 1)
     res = ResourceManager.sprites[@sprite]
     return if !res
-    res.draw_rot(position.x + scale_x*3, position.y + 2, res.z, 0, scale_x, 1)
+    res.draw_rot_frame(0, position.x + scale_x*3, position.y + 2, res.z, 0, scale_x, 1)
   end
 
   def update
@@ -151,12 +151,21 @@ class Mine < GameObject
     super
     set_sprite "mine"
     @platformer = true
+    @animation_speed = 0
+    @timer = 40
+  end
+
+  def update
+    super
+    return if @timer <= 0
+    @timer -= 1
+    @animation_speed = 0.2 if @timer <= 0
   end
 
   def collide(other)
     case other
     when Enemy
-      destroy
+      destroy if @animation_speed > 0
     end
   end
 

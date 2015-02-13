@@ -249,7 +249,4 @@ class FloatingText < GameObject
     obj.size = height
     obj
   end
-
-  def method_missing(method, *arguments, &block)
-  end
 end

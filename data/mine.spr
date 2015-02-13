@@ -1,5 +1,5 @@
 name:mine.bmp
-tiled:false:bool
+tiled:true:bool
 width:8:int
 height:5:int
 z:460:int
