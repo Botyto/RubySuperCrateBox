@@ -1,0 +1,7 @@
+name:minigun.bmp
+tiled:false:bool
+width:16:int
+height:8:int
+z:550:int
+color:0:int
+ascii::string

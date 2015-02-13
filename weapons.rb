@@ -15,9 +15,10 @@ class Weapon
     @can_shoot = true
   end
 
-  def draw(position)
-    return if !@sprite
-    @sprite.draw(position.x, position.y, @sprite.z)
+  def draw(position, scale_x = 1)
+    res = ResourceManager.sprites[@sprite]
+    return if !res
+    res.draw_rot(position.x, position.y, res.z, 0, scale_x, 1)
   end
 
   def update

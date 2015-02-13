@@ -1,0 +1,7 @@
+name:machinegun.bmp
+tiled:false:bool
+width:11:int
+height:6:int
+z:550:int
+color:0:int
+ascii::string

@@ -138,6 +138,11 @@ class Player < GameObject
   def destroy
     GameWindow.end_game @@crates_collected
   end
+
+  def draw
+    super
+    @weapon.draw(@position + Point.new(@sprite_scale.x.sign*3, 2), @sprite_scale.x) if @weapon
+  end
 end
 
 class Crate < GameObject

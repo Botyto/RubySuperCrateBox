@@ -1,0 +1,7 @@
+name:pistol.bmp
+tiled:false:bool
+width:5:int
+height:3:int
+z:550:int
+color:0:int
+ascii::string
