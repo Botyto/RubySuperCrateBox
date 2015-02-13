@@ -3,6 +3,14 @@ include MiniTest
 
 require_relative "../common.rb"
 
+WIDTH = 26 unless WIDTH
+HEIGHT = 18 unless HEIGHT
+
+GRID_WIDTH = 10 unless GRID_WIDTH
+GRID_HEIGHT = 10 unless GRID_HEIGHT
+
+GRAVITY = 0.5 unless GRAVITY
+
 module TestTools
   def assert_point(x, y, point, message = nil, delta = 0.001)
     raise ArgumentError, "Provided X isn't Numeric" unless x.is_a? Numeric
@@ -31,5 +39,15 @@ module TestTools
     assert_in_delta(y, rectangle.y, delta, "#{message} (Y is different)")
     assert_in_delta(w, rectangle.w, delta, "#{message} (W is different)")
     assert_in_delta(h, rectangle.h, delta, "#{message} (H is different)")
+  end
+end
+
+class GameWindow
+  def self.width
+    (WIDTH-2)*GRID_WIDTH
+  end
+
+  def self.height
+    (HEIGHT-2)*GRID_HEIGHT
   end
 end

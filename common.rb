@@ -165,12 +165,20 @@ class Rectangle
     @x, @y, @w, @h = x, y, w, h
   end
   
+  def x1
+    [x, x + w].min
+  end
+
+  def y1
+    [y, y+ h].min
+  end
+
   def x2
-    x + w
+    [x, x + w].max
   end
   
   def y2
-    y + h
+    [y, y + h].max
   end
   
   def area
@@ -179,10 +187,8 @@ class Rectangle
 
   alias :width :w
   alias :height :h
-  alias :x1 :x
-  alias :y1 :y
-  alias :left :x
-  alias :top :y
+  alias :left :x1
+  alias :top :y1
   alias :right :x2
   alias :bottom :y2
   
