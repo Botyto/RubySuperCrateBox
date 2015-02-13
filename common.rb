@@ -116,7 +116,7 @@ class Point
   end
 
   def angle
-    Math.atan2(@velocity.x, @velocity.y)
+    Math.atan2(@y, @x)
   end
 
   def angle=(degrees)
@@ -245,6 +245,10 @@ end
 
 def deg_to_rad(degrees)
   degrees*Math::PI/180
+end
+
+def rad_to_deg(radians)
+  radians/Math::PI*180
 end
 
 def parse_class(filename, klass)
