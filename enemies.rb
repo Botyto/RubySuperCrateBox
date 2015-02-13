@@ -21,6 +21,8 @@ class Enemy < GameObject
 
     @platformer = true
     @tint_timer = 0
+
+    @sound_die = ResourceManager.sounds["zombie_die"]
   end
 
   def update
@@ -58,6 +60,7 @@ class Enemy < GameObject
     @platformer = false
     @velocity.x = 0
     @gravity = GRAVITY
+    @sound_die.play
   end
 
   def get_angry
@@ -83,6 +86,7 @@ class Flyer < Enemy
     @platformer = false
     @gravity = 0.01
     @velocity.x = [1, -1].sample
+    @sound_die = ResourceManager.sounds["flyer_die"]
   end
 
   def update
@@ -93,7 +97,7 @@ class Flyer < Enemy
 
       if SceneManager.solid_free? aabb then
         @velocity.x *= -1 if !SceneManager.solid_free? aabb + Point.new(@velocity.x, 0)
-        @velocity.y *= -1 if !SceneManager.solid_free? aabb + Point.new(0, @velocity.y)
+        @velocity.y *= -1 if !SceneManager.solid_free? aabb   + Point.new(0, @velocity.y)
       end
 
       @velocity.length = 0.5 if self.speed > 0.5

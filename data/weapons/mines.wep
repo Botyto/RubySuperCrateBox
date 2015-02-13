@@ -1,6 +1,6 @@
 name:Mines
 sprite:mine
-sound:
+sound:mine_place
 shot_object:Mine:class
 level:0:int
 can_hold:false:bool

@@ -95,11 +95,14 @@ class Player < GameObject
       @weapon = Player.weapon_random
       @@crates_collected += 1
       FloatingText.create @position, @weapon.name, 10
+      ResourceManager.sounds["crate_collected"].play
     end
   end
 
   def kill
     return if !@alive
+
+    ResourceManager.sounds["player_die"].play
 
     @alive = false
     @gravity = GRAVITY
@@ -117,7 +120,10 @@ class Player < GameObject
       if key == KbX and @weapon then
         @shooting = true
       elsif (key == KbUp or key == KbZ) then
-        @velocity.y = -@jump_speed if !SceneManager::solid_free? aabb + Point.unit_y
+        if !SceneManager::solid_free? aabb + Point.unit_y then
+          @velocity.y = -@jump_speed
+          ResourceManager.sounds["player_jump"].play
+        end
       end
     end
   end

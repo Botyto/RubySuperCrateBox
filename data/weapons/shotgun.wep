@@ -1,6 +1,6 @@
 name:Shotgun
 sprite:shotgun
-sound:shot
+sound:shotgun_shoot
 shot_object:ShotgunBullet:class
 level:0:int
 can_hold:false:bool
