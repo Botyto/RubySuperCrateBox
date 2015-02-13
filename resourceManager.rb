@@ -74,8 +74,7 @@ class Sprite
   attr_accessor :name, :image, :tiled, :z, :width, :height, :color, :ascii
 
   def num_frames
-    @image.count if @image.is_a? Array
-    1
+    @tiled ? @image.count : 1
   end
 
   def aabb(offset = Point.new)
@@ -84,7 +83,7 @@ class Sprite
 
   def draw_ascii(x, y)
     GameWindow.set_color @color
-    base = Point.new((x/GameWindow.game.width).floor, (y/GameWindow.game.height).floor)
+    base = Point.new((x/GameWindow.width).floor, (y/GameWindow.height).floor)
 
     @ascii.split('\n').each_with_index do |line, number|
       GameWindow.move_cursor(base.x, base.y + number)
@@ -93,30 +92,30 @@ class Sprite
   end
 
   def draw_frame(frame, x, y, z, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
-    if tiled then
-      image[frame.floor % num_frames].draw(x, y, z, factor_x, factor_y, color, mode) 
+    if @tiled then
+      @image[frame.floor % num_frames].draw(x, y, z, factor_x, factor_y, color, mode) 
     else
-      image.draw(x, y, z, factor_x, factor_y, color, mode)
+      @image.draw(x, y, z, factor_x, factor_y, color, mode)
     end
     draw_ascii x, y
   end
 
   def draw_rot_frame(frame, x, y, z, angle, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default) 
-    if tiled then
-      image[frame.floor % num_frames].draw_rot(x, y, z, angle, 0.5, 0.5, factor_x, factor_y, color, mode) 
+    if @tiled then
+      @image[frame.floor % num_frames].draw_rot(x, y, z, angle, 0.5, 0.5, factor_x, factor_y, color, mode) 
     else
-      image.draw_rot(x, y, z, angle, 0.5, 0.5, factor_x, factor_y, color, mode) 
+      @image.draw_rot(x, y, z, angle, 0.5, 0.5, factor_x, factor_y, color, mode) 
     end
     draw_ascii x, y
   end
 
   def draw(x, y, z, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default) 
-    image.draw(x, y, z, factor_x, factor_y, color, mode)
+    @image.draw(x, y, z, factor_x, factor_y, color, mode)
     draw_ascii x, y
   end
 
   def draw_rot(x, y, z, angle, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default) 
-    image.draw_rot(x, y, z, angle, 0.5, 0.5, factor_x, factor_y, color, mode) 
+    @image.draw_rot(x, y, z, angle, 0.5, 0.5, factor_x, factor_y, color, mode) 
     draw_ascii x, y
   end
 end
@@ -133,7 +132,7 @@ class ResourceManager
       @scene_filenames  = ["level1", "level2", "level3"]
       @sprite_filenames = ["wall", "player", "fire", "enemy", "enemy_angry", "explosion", "crate",
         "bullet", "back_level1", "back_level2", "back_level3", "mine", "flyer", "pistol", "minigun",
-        "shotgun", "machinegun"]
+        "shotgun", "machinegun", "player_walk"]
       @sound_filenames  = ["gameplay1", "gameplay2", "gameplay3", "shot", "explosion", "get_angry",
         "player_jump", "crate_collected", "mine_place", "shotgun_shoot", "player_die", "flyer_die",
         "zombie_die"]

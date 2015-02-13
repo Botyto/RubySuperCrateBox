@@ -25,6 +25,9 @@ class GameObject
   end
 
   def update
+    # update sprite
+    @frame += @animation_speed
+    
     # update movement & position
     if speed > @friction then
       @velocity.length -= @friction
@@ -63,9 +66,6 @@ class GameObject
     else
       @position += @velocity
     end
-
-    # update sprite
-    @frame += @animation_speed
 
     # handle collisions with other objects
     handle_collisions

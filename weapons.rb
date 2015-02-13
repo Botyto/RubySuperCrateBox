@@ -18,11 +18,18 @@ class Weapon
   def draw(position, scale_x = 1)
     res = ResourceManager.sprites[@sprite]
     return if !res
-    res.draw_rot(position.x, position.y, res.z, 0, scale_x, 1)
+    res.draw_rot(position.x + scale_x*3, position.y + 2, res.z, 0, scale_x, 1)
   end
 
   def update
     @timer -= 1 if @timer > 0
+  end
+
+  def drop(position)
+    obj = SceneManager.add_object WeaponDrop
+    obj.set_sprite @sprite
+    obj.position = position
+    obj.velocity = Point.new rand(-2..2), -2
   end
 
   def shoot(shooter, position, direction)
@@ -68,6 +75,19 @@ class Weapon
 
   def shoot_released
     @can_shoot = true
+  end
+end
+
+class WeaponDrop < GameObject
+  def initialize
+    super
+    @gravity = GRAVITY
+  end
+
+  def update
+    super
+    @angle += 3
+    destroy if @position.y > GameWindow.height
   end
 end
 

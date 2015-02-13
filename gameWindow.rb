@@ -139,7 +139,7 @@ class GameWindow < Window
   def end_game(score)
     @score = score
     highscore_save
-    SceneManager.objects.keep_if { |obj| obj.is_a? Spawner }.each { |obj| obj.destroy }
+    SceneManager.objects.each { |obj| obj.destroy if obj.is_a? Spawner }
   end
 
   def highscore_load

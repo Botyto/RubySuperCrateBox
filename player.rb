@@ -65,8 +65,16 @@ class Player < GameObject
   def update
     @velocity.x = 0
     if @alive then
-      @velocity.x = -@walk_speed if GameWindow.button_down?(KbLeft)
-      @velocity.x = @walk_speed if GameWindow.button_down?(KbRight)
+      if GameWindow.button_down?(KbLeft) then
+        @velocity.x = -@walk_speed
+        set_sprite "player_walk"
+      elsif GameWindow.button_down?(KbRight) then
+        @velocity.x = @walk_speed
+        set_sprite "player_walk"
+      else
+        set_sprite "player"
+      end
+      
       @sprite_scale.x = @velocity.x.sign if @velocity.x != 0
     end
 
@@ -91,6 +99,7 @@ class Player < GameObject
   def collide(other)
     case other
     when Crate
+      return unless @alive
       other.replace!
       @weapon = Player.weapon_random
       @@crates_collected += 1
@@ -103,6 +112,7 @@ class Player < GameObject
     return if !@alive
 
     ResourceManager.sounds["player_die"].play
+    @weapon.drop @position if @weapon
 
     @alive = false
     @gravity = GRAVITY
@@ -141,7 +151,8 @@ class Player < GameObject
 
   def draw
     super
-    @weapon.draw(@position + Point.new(@sprite_scale.x.sign*3, 2), @sprite_scale.x) if @weapon
+    return unless @alive
+    @weapon.draw(@position, @sprite_scale.x) if @weapon
   end
 end
 
