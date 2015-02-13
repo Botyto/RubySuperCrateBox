@@ -1,0 +1,6 @@
+number:5:int
+text:What if... just if... it actually works oO
+klass:Point:class
+sym:it_works:sym
+im_nil::nil
+boolean:true:bool

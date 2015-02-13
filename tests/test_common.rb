@@ -3,6 +3,10 @@ include MiniTest
 
 require_relative "../common.rb"
 
+class ParsabeClass
+  attr_accessor :number, :text, :klass, :sym, :im_nil, :boolean
+end
+
 class TestPoint < Test
   def setup
     @zero = Point.zero
@@ -148,5 +152,49 @@ class TestRectangle < Test
     assert_in_delta(2, rect.x2)
     assert_in_delta(2, rect.y2)
     assert_in_delta(1, rect.area)
+  end
+end
+
+class TestOtherCommon < Test
+  def test_string_to_class
+    assert_equal(Object, "Object".to_class)
+    assert_equal(Point, "Point".to_class)
+    assert_equal(MiniTest::Test, "Minitest::Test".to_class)
+  end
+
+  def test_numeric_sign
+    assert_equal(0, 0.sign)
+    assert_equal(1, 15.sign)
+    assert_equal(-1, (-3).sign)
+
+    assert_equal(1, (0.5).sign)
+    assert_equal(-1, (-5/3).sign)
+  end
+
+  def test_clamp
+    assert_equal(0, clamp(0, -1, 2))
+    assert_equal(1, clamp(0,  1, 2))
+    assert_equal(2, clamp(0,  3, 2))
+  end
+
+  def test_deg_rad_conversion
+    assert_in_delta(0,   rad_to_deg(0))
+    assert_in_delta(180, rad_to_deg(Math::PI))
+    assert_in_delta(360, rad_to_deg(Math::PI*2))
+
+    assert_in_delta(0,         deg_to_rad(0))
+    assert_in_delta(Math::PI,   deg_to_rad(180))
+    assert_in_delta(Math::PI*2, deg_to_rad(360))
+  end
+
+  def test_parse_class
+    o = parse_class("data/class_to_parse.txt", ParsabeClass)
+
+    assert_equal(5, o.number)
+    assert_equal("What if... just if... it actually works oO", o.text)
+    assert_equal(Point, o.klass)
+    assert_equal(:it_works, o.sym)
+    assert_equal(nil, o.im_nil)
+    assert_equal(true, o.boolean)
   end
 end
