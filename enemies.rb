@@ -100,7 +100,7 @@ class Flyer < Enemy
   end
 
   def update
-    if @health > 0 then
+    if @alive then
       @velocity.y += 0.1 if @position.y < 20
       @velocity.y += 0.01
       @velocity.x *= 1.1 if @velocity.x.abs < 0.4
