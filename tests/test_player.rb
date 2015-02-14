@@ -26,17 +26,9 @@ class SceneManager
     obj
   end
 
-  def self.cleanup_counter
-    @@counter = {}
-  end
-
-  def self.cleanup_objects
-    @@objects = []
-  end
-
   def self.cleanup
-    SceneManager.cleanup_counter
-    SceneManager.cleanup_objects
+    @@counter = {}
+    @@objects = []
   end
 
   def self.count(klass)
@@ -76,8 +68,9 @@ end
 
 class Crate < GameObject
   def replace!
+    @position_previous = @position
     @position = Point::random(GameWindow.width, GameWindow.height)
-    while !SceneManager::solid_free? aabb do
+    while !SceneManager::solid_free? aabb or @position.distance(@position_previous) < 50 do
       @position = Point.random(GameWindow.width, GameWindow.height)
     end
   end
@@ -89,6 +82,7 @@ end
 
 class Player < GameObject
   def initialize
+    super
     @@weapons = {}
     @@crates_collected = 0
     @alive = true
