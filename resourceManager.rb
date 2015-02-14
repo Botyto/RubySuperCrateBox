@@ -134,7 +134,7 @@ class ResourceManager
       @scene_filenames  = ["level1", "level2", "level3"]
       @sprite_filenames = ["wall", "player", "fire", "enemy", "enemy_angry", "explosion", "crate",
         "bullet", "back_level1", "back_level2", "back_level3", "mine", "flyer", "pistol", "minigun",
-        "shotgun", "machinegun", "player_walk", "smoke"]
+        "shotgun", "machinegun", "player_walk", "smoke", "flyer_angry"]
       @sound_filenames  = ["gameplay1", "gameplay2", "gameplay3", "shot", "explosion", "get_angry",
         "player_jump", "crate_collected", "mine_place", "shotgun_shoot", "player_die", "flyer_die",
         "zombie_die"]

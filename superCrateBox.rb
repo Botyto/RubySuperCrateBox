@@ -1,4 +1,4 @@
 require_relative "gameWindow.rb"
 
-Game = GameWindow.new
+Game = GameWindow.new(ARGV.include? "-f")
 Game.show

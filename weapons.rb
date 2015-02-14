@@ -165,7 +165,7 @@ class Mine < GameObject
   def collide(other)
     case other
     when Enemy
-      destroy if @animation_speed > 0
+      destroy if @animation_speed > 0 and other.alive
     end
   end
 

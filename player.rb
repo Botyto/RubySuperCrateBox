@@ -22,8 +22,8 @@ class Player < GameObject
       @@weapons[name.to_s]
     end
 
-    def weapon_random(level = 9999)
-      @@weapons.keep_if { |name, wep| wep.level <= level }.to_a.sample[1]
+    def weapon_random(weapon, level = 9999)
+      @@weapons.select { |name, wep| wep.level <= level and wep != weapon }.to_a.sample[1]
     end
 
     def parse_weapon(filename)
@@ -52,7 +52,7 @@ class Player < GameObject
     @animation_speed = 0.2
 
     @alive = true
-    @level = 5
+    @level = 9999
 
     @shooting = false
     @weapon = Player::weapon(:pistol)
@@ -103,7 +103,7 @@ class Player < GameObject
     when Crate
       return unless @alive
       other.replace!
-      @weapon = Player.weapon_random
+      @weapon = Player.weapon_random(@weapon, @level)
       @@crates_collected += 1
       FloatingText.create @position, @weapon.name, 10
       ResourceManager.sounds["crate_collected"].play

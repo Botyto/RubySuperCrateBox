@@ -143,11 +143,8 @@ class TestPlayer < Test
     crate = SceneManager.add_object Crate
     player = SceneManager.add_object Player
 
-    player.position = Point.new
-    crate.position = Point.new
-
     assert_equal(0, Player.crates_collected)
-    player.handle_collisions
+    player.collide crate
     assert_equal(1, Player.crates_collected)
   end
 end

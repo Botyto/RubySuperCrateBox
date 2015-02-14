@@ -4,7 +4,7 @@ require_relative "player.rb"
 require_relative "common.rb"
 
 class Enemy < GameObject
-  attr_reader :angry
+  attr_reader :angry, :alive
 
   def initialize
     super
@@ -103,7 +103,7 @@ class Flyer < Enemy
     if @health > 0 then
       @velocity.y += 0.1 if @position.y < 20
       @velocity.y += 0.01
-      @velocity.x += @velocity.x.sign*0.1 if @velocity.x.abs < 0.4
+      @velocity.x *= 1.1 if @velocity.x.abs < 0.4
 
       if SceneManager.solid_free? aabb then
         @velocity.x *= -1 if !SceneManager.solid_free? aabb + Point.new(@velocity.x, 0)

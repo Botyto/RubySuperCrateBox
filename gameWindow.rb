@@ -69,8 +69,8 @@ class GameWindow < Window
     end
   end
 
-  def initialize
-    super((WIDTH-2)*GRID_WIDTH, (HEIGHT-2)*GRID_HEIGHT, false)
+  def initialize(fullscreen = false)
+    super((WIDTH-2)*GRID_WIDTH, (HEIGHT-2)*GRID_HEIGHT, fullscreen)
     @caption = "Ruby Super Crate Box"
     @@bounds = Rectangle.new(GRID_WIDTH, GRID_HEIGHT, (WIDTH-2)*GRID_WIDTH, (HEIGHT-2)*GRID_HEIGHT)
     @@game = self
