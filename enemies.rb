@@ -35,7 +35,7 @@ class Enemy < GameObject
       end
 
       @sprite_scale.x = @velocity.x.sign
-      get_angry if @position.y > GameWindow.height and @alive
+      get_angry if @position.y > GameWindow.height
     else
       @angle += 3
       destroy if @position.y > GameWindow.height
