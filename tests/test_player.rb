@@ -1,10 +1,9 @@
 require "minitest/autorun"
 include MiniTest
 
-require_relative "test_tools.rb"
 require_relative "../common.rb"
 require_relative "../player.rb"
-
+require_relative "test_tools.rb"
 
 class SceneManager
   def self.initialize
@@ -92,6 +91,18 @@ class Player < GameObject
   def initialize
     @@weapons = {}
     @@crates_collected = 0
+    @alive = true
+  end
+
+  def self.weapon_random
+  end
+
+  def collide(other)
+    case other
+    when Crate
+      return unless @alive
+      @@crates_collected += 1
+    end
   end
 
   def size
@@ -136,7 +147,7 @@ class TestPlayer < Test
     crate.position = Point.new
 
     assert_equal(0, Player.crates_collected)
-    player.collide crate if player.aabb.intersects? crate.aabb
+    player.handle_collisions
     assert_equal(1, Player.crates_collected)
   end
 end

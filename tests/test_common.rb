@@ -1,8 +1,8 @@
 require "minitest/autorun"
 include MiniTest
 
-require_relative "test_tools.rb"
 require_relative "../common.rb"
+require_relative "test_tools.rb"
 
 class ParsabeClass
   attr_accessor :number, :text, :klass, :sym, :im_nil, :boolean

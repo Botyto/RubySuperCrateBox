@@ -12,6 +12,7 @@ class GameObject
     @sprite_scale = Point::one
     @gravity = 0
     @friction = 0
+    @solid = false
 
     @angle = 0
     @frame = 0
@@ -83,6 +84,7 @@ class GameObject
 
   def handle_collisions
     SceneManager.objects.each do |other|
+      next if other == self
       if @sprite and other.sprite then
         collide other if aabb.intersects? other.aabb
       elsif @sprite and !other.sprite then
