@@ -167,8 +167,9 @@ class Crate < GameObject
   end
 
   def replace!
+    @position_previous = @position
     @position = Point::random(GameWindow.width, GameWindow.height)
-    while !SceneManager::solid_free? aabb do
+    while !SceneManager::solid_free? aabb or @position.distance(@position_previous) < 50 do
       @position = Point.random(GameWindow.width, GameWindow.height)
     end
     @gravity = GRAVITY
@@ -177,6 +178,7 @@ class Crate < GameObject
 
   def update
     return if @gravity <= 0
+    @position_previous = @position
     replace! if @position.y > GameWindow.height
 
     @velocity.y += @gravity
